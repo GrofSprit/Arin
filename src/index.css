@@ -75,6 +75,27 @@
     justify-content: space-around;
   }
 
+  .legal-content section + section {
+    @apply mt-9 pt-9 border-t border-silver/70;
+  }
+
+  .legal-content h2 {
+    @apply text-xl md:text-2xl font-semibold text-midnight mb-4;
+  }
+
+  .legal-content p,
+  .legal-content address {
+    @apply text-base text-midnight/70 leading-[1.75] not-italic;
+  }
+
+  .legal-content p + p {
+    @apply mt-4;
+  }
+
+  .legal-content a {
+    @apply text-electric underline underline-offset-4 decoration-electric/30 hover:decoration-electric transition-colors;
+  }
+
   /* Entrance animations */
   .entrance {
     opacity: 0;

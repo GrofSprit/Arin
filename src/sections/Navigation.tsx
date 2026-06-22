@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Menu, X } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { WHATSAPP_URL } from '../lib/whatsapp'
 
 interface NavigationProps {
@@ -9,6 +10,8 @@ interface NavigationProps {
 export default function Navigation({ transparent = true }: NavigationProps) {
   const [scrolled, setScrolled] = useState(() => !transparent || window.scrollY > 80)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!transparent) return
@@ -35,6 +38,23 @@ export default function Navigation({ transparent = true }: NavigationProps) {
 
   const scrollToSection = useCallback((id: string) => {
     setMobileOpen(false)
+
+    if (location.pathname !== '/') {
+      navigate('/')
+      window.setTimeout(() => {
+        if (id === 'top') {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+          return
+        }
+        const target = document.getElementById(id)
+        if (target) {
+          const top = target.getBoundingClientRect().top + window.pageYOffset - 124
+          window.scrollTo({ top, behavior: 'smooth' })
+        }
+      }, 0)
+      return
+    }
+
     if (id === 'top') {
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
@@ -45,7 +65,7 @@ export default function Navigation({ transparent = true }: NavigationProps) {
       const top = el.getBoundingClientRect().top + window.pageYOffset - offset
       window.scrollTo({ top, behavior: 'smooth' })
     }
-  }, [])
+  }, [location.pathname, navigate])
 
   const navLinks = [
     { label: "So funktioniert's", id: 'how-it-works' },

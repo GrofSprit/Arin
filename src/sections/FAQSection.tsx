@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useId } from 'react'
 import { ChevronDown } from 'lucide-react'
 
 const faqs = [
@@ -38,36 +38,29 @@ function FAQItem({ question, answer, isOpen, onToggle }: {
   isOpen: boolean
   onToggle: () => void
 }) {
-  const contentRef = useRef<HTMLDivElement>(null)
-  const [height, setHeight] = useState(0)
-
-  useEffect(() => {
-    if (contentRef.current) {
-      setHeight(contentRef.current.scrollHeight)
-    }
-  }, [answer])
+  const answerId = useId()
 
   return (
     <div className="border-b border-silver/70">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between py-5 md:py-6 text-left group cursor-pointer select-none"
+        className="w-full min-h-[72px] flex items-center justify-between py-6 md:py-7 text-left group cursor-pointer select-none touch-manipulation"
         aria-expanded={isOpen}
+        aria-controls={answerId}
         type="button"
       >
-        <span className={`text-base md:text-lg font-medium pr-6 transition-colors duration-200 ${isOpen ? 'text-electric' : 'text-midnight group-hover:text-electric'}`}>
+        <span className={`text-[17px] md:text-xl font-medium leading-snug pr-4 md:pr-6 transition-colors duration-200 ${isOpen ? 'text-electric' : 'text-midnight group-hover:text-electric'}`}>
           {question}
         </span>
         <span className={`flex-shrink-0 w-8 h-8 rounded-full bg-silver/60 flex items-center justify-center transition-all duration-300 ${isOpen ? 'bg-electric/10 rotate-180' : 'group-hover:bg-electric/10'}`}>
           <ChevronDown size={18} className={`transition-colors duration-200 ${isOpen ? 'text-electric' : 'text-midnight/40'}`} strokeWidth={2} />
         </span>
       </button>
-      <div
-        className="overflow-hidden transition-all duration-300 ease-out"
-        style={{ maxHeight: isOpen ? height : 0, opacity: isOpen ? 1 : 0 }}
-      >
-        <div ref={contentRef} className="pb-5 md:pb-6 pr-12">
-          <p className="text-base text-midnight/60 leading-relaxed">{answer}</p>
+      <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+        <div className="min-h-0 overflow-hidden">
+          <div id={answerId} role="region" className="pb-7 md:pb-8 pr-2 md:pr-12">
+            <p className="text-base md:text-[17px] text-midnight/75 leading-[1.7]">{answer}</p>
+          </div>
         </div>
       </div>
     </div>

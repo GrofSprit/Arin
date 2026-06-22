@@ -1,5 +1,7 @@
-import { MapPin, PackageCheck, Star, Store } from 'lucide-react'
+import { Clock, MapPin, MessageCircle, PackageCheck, Star, Store } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { WHATSAPP_URL } from '../lib/whatsapp'
+import { GOOGLE_REVIEWS_URL } from '../lib/externalLinks'
 
 export default function Footer() {
   return (
@@ -24,7 +26,11 @@ export default function Footer() {
             <h4 className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-4">B&amp;C Fahrzeugteile</h4>
             <ul className="space-y-3 text-sm text-white/50">
               <li className="flex items-center gap-2"><MapPin size={15} className="text-electric" /> Mönchengladbach</li>
-              <li className="flex items-center gap-2"><Star size={15} className="text-electric fill-electric" /> 4,6 bei Google</li>
+              <li>
+                <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white/80 transition-colors">
+                  <Star size={15} className="text-electric fill-electric" /> 4,6 bei Google
+                </a>
+              </li>
               <li className="flex items-center gap-2"><PackageCheck size={15} className="text-electric" /> Deutschlandweiter Versand</li>
               <li className="flex items-center gap-2"><Store size={15} className="text-electric" /> Abholung möglich</li>
             </ul>
@@ -33,18 +39,22 @@ export default function Footer() {
           {/* Contact */}
           <div>
             <h4 className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-4">Kontakt</h4>
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               <li><a href="mailto:aa@bc-fahrzeugteile.de" className="text-sm text-white/50 hover:text-white/80 transition-colors">aa@bc-fahrzeugteile.de</a></li>
               <li><a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-whatsapp hover:text-whatsapp-dark transition-colors">+49 173 3795779</a></li>
+              <li className="flex items-center gap-2 text-sm text-white/50"><Clock size={15} className="text-electric flex-shrink-0" /> Mo–Fr: 08:00–18:00</li>
+              <li className="flex items-center gap-2 text-sm text-white/50"><MessageCircle size={15} className="text-electric flex-shrink-0" /> Antwort meist am selben Tag</li>
             </ul>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="pt-8 border-t border-white/[0.06] flex flex-col lg:flex-row items-center justify-between gap-4">
           <p className="text-xs text-white/25">© {new Date().getFullYear()} TeilePilot24. Alle Rechte vorbehalten.</p>
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-xs text-whatsapp/60 hover:text-whatsapp transition-colors">
-            WhatsApp Anfrage
-          </a>
+          <nav aria-label="Rechtliche Links" className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
+            <Link to="/impressum" className="text-xs text-white/40 hover:text-white/80 transition-colors">Impressum</Link>
+            <Link to="/datenschutz" className="text-xs text-white/40 hover:text-white/80 transition-colors">Datenschutz</Link>
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-xs text-whatsapp/60 hover:text-whatsapp transition-colors">WhatsApp Anfrage</a>
+          </nav>
         </div>
       </div>
     </footer>
