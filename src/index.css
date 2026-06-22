@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 220 50% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 50% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 50% 16%;
+    --primary: 228 82% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 2% 94%;
+    --secondary-foreground: 220 50% 16%;
+    --muted: 0 2% 94%;
+    --muted-foreground: 220 50% 16% / 0.5;
+    --accent: 228 82% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 2% 94%;
+    --input: 0 2% 94%;
+    --ring: 228 82% 60%;
+    --radius: 0rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-midnight font-sans antialiased;
+    min-width: 320px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 3px solid rgba(67, 97, 238, 0.55);
+    outline-offset: 3px;
+  }
+
+  * {
+    @apply border-border;
+  }
+}
+
+@layer components {
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .trust-marquee {
+    display: flex;
+    width: max-content;
+    animation: trust-marquee 38s linear infinite;
+    will-change: transform;
+  }
+
+  .trust-marquee-group {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 100vw;
+    justify-content: space-around;
+  }
+
+  /* Entrance animations */
+  .entrance {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.165, 0.84, 0.44, 1),
+                transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .entrance.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .entrance-headline {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s cubic-bezier(0.165, 0.84, 0.44, 1),
+                transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .entrance-headline.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Hero entrance animations */
+  .hero-entrance {
+    opacity: 0;
+  }
+
+  /* Trust badge pill */
+  .trust-badge {
+    @apply inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs md:text-sm text-white/80;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* FAQ accordion */
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .faq-item.open .faq-answer {
+    max-height: 500px;
+    opacity: 1;
+  }
+
+  .faq-item.open .faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  .faq-chevron {
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* Form validation (kept for any future forms) */
+  .form-input {
+    @apply w-full px-4 py-3.5 text-sm text-midnight bg-white border border-silver/60 outline-none transition-colors duration-200;
+  }
+
+  .form-input::placeholder {
+    @apply text-midnight/40;
+  }
+
+  .form-input:focus {
+    @apply border-electric;
+    outline: 2px solid rgba(67, 97, 238, 0.25);
+    outline-offset: 0;
+  }
+
+  .form-input.error {
+    @apply border-error;
+  }
+
+  .form-error {
+    @apply text-xs text-error mt-1.5;
+  }
+
+  /* File upload zone */
+  .file-upload-zone {
+    @apply w-full px-6 py-6 border-2 border-dashed border-silver/60 bg-silver/8 text-center cursor-pointer transition-colors duration-200;
+  }
+
+  .file-upload-zone:hover {
+    @apply border-electric bg-silver/15;
+  }
+
+  .file-upload-zone.has-file {
+    @apply border-solid border-electric;
+  }
+
+  /* WhatsApp button glow */
+  .whatsapp-glow {
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.35);
+  }
+
+  /* Part card overlay gradient */
+  .part-card-gradient {
+    background: linear-gradient(to top, rgba(20, 33, 61, 0.88) 0%, rgba(20, 33, 61, 0.45) 45%, transparent 100%);
+  }
+
+  /* Step number circle */
+  .step-number {
+    @apply w-11 h-11 rounded-full bg-electric text-white flex items-center justify-center text-sm font-bold flex-shrink-0;
+  }
+
+  /* Visual card hover */
+  .visual-card {
+    @apply transition-all duration-300;
+  }
+
+  .visual-card:hover {
+    @apply shadow-card-hover;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes trust-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .trust-marquee:hover {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .entrance, .entrance-headline, .hero-entrance {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .trust-marquee {
+    animation: none !important;
+  }
+  .trust-marquee-group[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+/* Hide Kimi Agent floating button (injected by hosting platform) */
+[class*="kimi-agent"],
+[class*="Kimi Agent"],
+a[href*="kimi.com/agent"],
+button:has(> [class*="kimi"]),
+[class*="agent-button"],
+[id*="kimi-agent"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
