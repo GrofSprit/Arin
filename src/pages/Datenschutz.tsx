@@ -13,7 +13,7 @@ export default function Datenschutz() {
           Limitenstraße 111<br />
           41236 Mönchengladbach<br />
           E-Mail: <a href="mailto:aa@bc-fahrzeugteile.de">aa@bc-fahrzeugteile.de</a><br />
-          Telefon: <a href="tel:+491733795779">+49 173 3795779</a>
+          Telefon: <a href="tel:+491773773486">+49 177 3773486</a>
         </address>
       </section>
 

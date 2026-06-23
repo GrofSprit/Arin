@@ -19,7 +19,7 @@ export default function Impressum() {
       <section>
         <h2>Kontakt</h2>
         <p>
-          Telefon: <a href="tel:+491733795779">+49 173 3795779</a><br />
+          Telefon: <a href="tel:+491773773486">+49 177 3773486</a><br />
           E-Mail: <a href="mailto:aa@bc-fahrzeugteile.de">aa@bc-fahrzeugteile.de</a>
         </p>
       </section>

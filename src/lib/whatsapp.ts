@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = '491733795779'
+const WHATSAPP_NUMBER = '491773773486'
 
 export const DEFAULT_WHATSAPP_MESSAGE =
   'Hallo TeilePilot24, ich benötige ein Ersatzteil für mein Fahrzeug. Ich sende Ihnen gleich ein Foto vom Fahrzeugschein.'

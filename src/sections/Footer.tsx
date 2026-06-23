@@ -41,7 +41,7 @@ export default function Footer() {
             <h4 className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-4">Kontakt</h4>
             <ul className="space-y-3">
               <li><a href="mailto:aa@bc-fahrzeugteile.de" className="text-sm text-white/50 hover:text-white/80 transition-colors">aa@bc-fahrzeugteile.de</a></li>
-              <li><a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-whatsapp hover:text-whatsapp-dark transition-colors">+49 173 3795779</a></li>
+              <li><a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-whatsapp hover:text-whatsapp-dark transition-colors">+49 177 3773486</a></li>
               <li className="flex items-center gap-2 text-sm text-white/50"><Clock size={15} className="text-electric flex-shrink-0" /> Mo–Fr: 08:00–18:00</li>
               <li className="flex items-center gap-2 text-sm text-white/50"><MessageCircle size={15} className="text-electric flex-shrink-0" /> Antwort meist am selben Tag</li>
             </ul>
