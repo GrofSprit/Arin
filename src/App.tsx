@@ -5,6 +5,8 @@ import Home from './pages/Home'
 import Success from './pages/Success'
 import Impressum from './pages/Impressum'
 import Datenschutz from './pages/Datenschutz'
+import SeoPage from './pages/SeoPage'
+import { seoPages } from './data/seoPages'
 
 export default function App() {
   return (
@@ -14,6 +16,9 @@ export default function App() {
         <Route path="/success" element={<Success />} />
         <Route path="/impressum" element={<Impressum />} />
         <Route path="/datenschutz" element={<Datenschutz />} />
+        {seoPages.map((page) => (
+          <Route key={page.path} path={page.path} element={<SeoPage />} />
+        ))}
       </Routes>
 
       <Analytics />
