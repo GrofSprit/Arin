@@ -1,7 +1,7 @@
 import { MapPin, MessageCircle, Star, Store, Truck } from 'lucide-react'
 
 const trustItems = [
-  { icon: Star, label: '4,6 Google Bewertung' },
+  { icon: Star, label: '4,9 Google Bewertung' },
   { icon: Truck, label: 'Versand in ganz Deutschland' },
   { icon: Store, label: 'Abholung möglich in Mönchengladbach' },
   { icon: MapPin, label: 'B&C Fahrzeugteile' },

@@ -28,7 +28,7 @@ export default function Footer() {
               <li className="flex items-center gap-2"><MapPin size={15} className="text-electric" /> Mönchengladbach</li>
               <li>
                 <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white/80 transition-colors">
-                  <Star size={15} className="text-electric fill-electric" /> 4,6 bei Google
+                  <Star size={15} className="text-electric fill-electric" /> 4,9 bei Google
                 </a>
               </li>
               <li className="flex items-center gap-2"><PackageCheck size={15} className="text-electric" /> Deutschlandweiter Versand</li>

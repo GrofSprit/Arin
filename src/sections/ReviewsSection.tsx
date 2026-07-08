@@ -16,9 +16,9 @@ export default function ReviewsSection() {
             <div className="entrance bg-midnight p-7 md:p-10 text-white shadow-card">
               <p className="text-xs font-semibold uppercase tracking-wider text-electric mb-4">Google-Bewertung</p>
               <div className="flex items-end gap-3 mb-3">
-                <strong className="text-5xl md:text-6xl font-semibold leading-none">4,6/5</strong>
+                <strong className="text-5xl md:text-6xl font-semibold leading-none">4,9/5</strong>
               </div>
-              <div className="flex gap-1" aria-label="4,6 von 5 Sternen bei Google">
+              <div className="flex gap-1" aria-label="4,9 von 5 Sternen bei Google">
                 {[0, 1, 2, 3, 4].map((star) => (
                   <Star key={star} size={22} className="fill-electric text-electric" aria-hidden="true" />
                 ))}
