@@ -7,6 +7,7 @@ import Impressum from './pages/Impressum'
 import Datenschutz from './pages/Datenschutz'
 import SeoPage from './pages/SeoPage'
 import { seoPages } from './data/seoPages'
+import CookieBanner from './components/CookieBanner'
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
       </Routes>
 
       <Analytics />
+      <CookieBanner />
     </>
   )
 }
