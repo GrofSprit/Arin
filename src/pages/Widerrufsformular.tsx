@@ -1,20 +1,55 @@
-import { useEffect } from 'react'
+import { type FormEvent, useEffect, useState } from 'react'
 import Navigation from '../sections/Navigation'
 import Footer from '../sections/Footer'
 import StickyWhatsApp from '../sections/StickyWhatsApp'
 
 const inputClass = 'mt-2 w-full border border-silver/70 bg-white px-4 py-3 text-sm text-midnight outline-none transition-colors focus:border-electric focus:ring-2 focus:ring-electric/20'
 const labelClass = 'block text-sm font-semibold text-midnight'
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xwvdjdja'
 
-export default function MusterWiderrufsformular() {
+export default function Widerrufsformular() {
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'succeeded' | 'error'>('idle')
+
   useEffect(() => {
     window.scrollTo(0, 0)
     const previousTitle = document.title
-    document.title = 'Muster-Widerrufsformular | TeilePilot24'
+    document.title = 'Widerrufsformular | TeilePilot24'
     return () => {
       document.title = previousTitle
     }
   }, [])
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setStatus('submitting')
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+    const customerEmail = String(formData.get('email') || '')
+
+    formData.set('_subject', 'Widerrufsformular TeilePilot24')
+    formData.set('form_name', 'Widerrufsformular')
+    formData.set('_replyto', customerEmail)
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Formspree submission failed')
+      }
+
+      form.reset()
+      setStatus('succeeded')
+    } catch {
+      setStatus('error')
+    }
+  }
 
   return (
     <>
@@ -23,7 +58,7 @@ export default function MusterWiderrufsformular() {
         <div className="max-w-[900px] mx-auto px-5 md:px-10 py-14 md:py-20">
           <header className="mb-9 md:mb-12">
             <p className="text-xs font-semibold uppercase tracking-wider text-electric mb-3">Rechtliche Informationen</p>
-            <h1 className="text-3xl md:text-5xl font-semibold text-midnight tracking-tight mb-4">Muster-Widerrufsformular</h1>
+            <h1 className="text-3xl md:text-5xl font-semibold text-midnight tracking-tight mb-4">Widerrufsformular</h1>
             <p className="text-base md:text-lg text-midnight/60 leading-relaxed">Wenn Sie den Vertrag widerrufen wollen, füllen Sie bitte dieses Formular aus und senden Sie es ab.</p>
           </header>
 
@@ -41,9 +76,22 @@ export default function MusterWiderrufsformular() {
 
             <section>
               <h2>Formular</h2>
-              <form action="https://formspree.io/f/xbdvbdgb" method="POST" className="space-y-5">
-                <input type="hidden" name="_subject" value="Muster-Widerrufsformular TeilePilot24" />
-                <input type="hidden" name="form_name" value="Muster-Widerrufsformular" />
+
+              {status === 'succeeded' && (
+                <div className="mb-6 border border-emerald-200 bg-emerald-50 p-4 text-sm leading-relaxed text-emerald-950">
+                  Ihr Widerruf wurde gesendet. Sie bleiben auf dieser Seite und können bei Bedarf ein weiteres Formular absenden.
+                </div>
+              )}
+
+              {status === 'error' && (
+                <div className="mb-6 border border-red-200 bg-red-50 p-4 text-sm leading-relaxed text-red-950">
+                  Das Formular konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder senden Sie Ihren Widerruf per E-Mail an <a href="mailto:aa@bc-fahrzeugteile.de">aa@bc-fahrzeugteile.de</a>.
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <input type="hidden" name="_subject" value="Widerrufsformular TeilePilot24" />
+                <input type="hidden" name="form_name" value="Widerrufsformular" />
 
                 <label className={labelClass}>
                   Hiermit widerrufe ich den von mir abgeschlossenen Vertrag über den Kauf der folgenden Ware(n):
@@ -90,8 +138,8 @@ export default function MusterWiderrufsformular() {
                     <input type="text" name="bestellnummer" className={inputClass} />
                   </label>
                   <label className={labelClass}>
-                    E-Mail-Adresse, falls vorhanden:
-                    <input type="email" name="email" className={inputClass} autoComplete="email" />
+                    E-Mail-Adresse:
+                    <input type="email" name="email" required className={inputClass} autoComplete="email" />
                   </label>
                 </div>
 
@@ -106,9 +154,10 @@ export default function MusterWiderrufsformular() {
 
                 <button
                   type="submit"
-                  className="inline-flex w-full sm:w-auto items-center justify-center bg-electric px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-electric-dark"
+                  disabled={status === 'submitting'}
+                  className="inline-flex w-full sm:w-auto items-center justify-center bg-electric px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-electric-dark disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  Widerruf absenden
+                  {status === 'submitting' ? 'Wird gesendet...' : 'Widerruf absenden'}
                 </button>
               </form>
             </section>

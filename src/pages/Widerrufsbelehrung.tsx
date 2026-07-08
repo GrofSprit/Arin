@@ -39,7 +39,7 @@ export default function Widerrufsbelehrung() {
                 E-Mail: <a href="mailto:aa@bc-fahrzeugteile.de">aa@bc-fahrzeugteile.de</a>
               </address>
               <p>mittels einer eindeutigen Erklärung, zum Beispiel per Brief oder E-Mail, über Ihren Entschluss informieren, diesen Vertrag zu widerrufen.</p>
-              <p>Sie können dafür das <Link to="/muster-widerrufsformular">Muster-Widerrufsformular</Link> verwenden, das jedoch nicht vorgeschrieben ist.</p>
+              <p>Sie können dafür das <Link to="/widerrufsformular">Widerrufsformular</Link> verwenden, das jedoch nicht vorgeschrieben ist.</p>
               <p>Sofern auf unserer Website eine elektronische Widerrufsfunktion bereitgestellt wird, können Sie Ihren Widerruf auch direkt über diese Funktion erklären. Nach Absenden des Widerrufs erhalten Sie eine Bestätigung über den Eingang Ihres Widerrufs.</p>
               <p>Zur Wahrung der Widerrufsfrist reicht es aus, dass Sie die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Widerrufsfrist absenden.</p>
             </section>

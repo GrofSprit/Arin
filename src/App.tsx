@@ -6,7 +6,7 @@ import Success from './pages/Success'
 import Impressum from './pages/Impressum'
 import Datenschutz from './pages/Datenschutz'
 import Widerrufsbelehrung from './pages/Widerrufsbelehrung'
-import MusterWiderrufsformular from './pages/MusterWiderrufsformular'
+import Widerrufsformular from './pages/Widerrufsformular'
 import SeoPage from './pages/SeoPage'
 import { seoPages } from './data/seoPages'
 import CookieBanner from './components/CookieBanner'
@@ -20,7 +20,7 @@ export default function App() {
         <Route path="/impressum" element={<Impressum />} />
         <Route path="/datenschutz" element={<Datenschutz />} />
         <Route path="/widerrufsbelehrung" element={<Widerrufsbelehrung />} />
-        <Route path="/muster-widerrufsformular" element={<MusterWiderrufsformular />} />
+        <Route path="/widerrufsformular" element={<Widerrufsformular />} />
         {seoPages.map((page) => (
           <Route key={page.path} path={page.path} element={<SeoPage />} />
         ))}

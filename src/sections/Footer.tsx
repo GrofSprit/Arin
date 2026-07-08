@@ -54,7 +54,7 @@ export default function Footer() {
             <Link to="/impressum" className="text-xs text-white/40 hover:text-white/80 transition-colors">Impressum</Link>
             <Link to="/datenschutz" className="text-xs text-white/40 hover:text-white/80 transition-colors">Datenschutz</Link>
             <Link to="/widerrufsbelehrung" className="text-xs text-white/40 hover:text-white/80 transition-colors">Widerrufsbelehrung</Link>
-            <Link to="/muster-widerrufsformular" className="text-xs text-white/40 hover:text-white/80 transition-colors">Muster-Widerrufsformular</Link>
+            <Link to="/widerrufsformular" className="text-xs text-white/40 hover:text-white/80 transition-colors">Widerrufsformular</Link>
             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-xs text-whatsapp/60 hover:text-whatsapp transition-colors">WhatsApp Anfrage</a>
           </nav>
         </div>
