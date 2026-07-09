@@ -42,11 +42,13 @@ export default function Widerrufsformular() {
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <a
                   href={PDF_URL}
-                  download
-                  className="inline-flex items-center justify-center gap-2 bg-electric px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-electric-dark"
+                  download="Widerrufsformular-TeilePilot24.pdf"
+                  aria-label="PDF-Widerrufsformular herunterladen"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 bg-electric px-6 py-3.5 text-sm font-semibold !text-white transition-colors hover:bg-electric-dark hover:!text-white"
+                  style={{ color: '#ffffff' }}
                 >
-                  <Download size={17} aria-hidden="true" />
-                  PDF herunterladen
+                  <Download size={17} aria-hidden="true" className="text-white" />
+                  <span className="text-white">PDF herunterladen</span>
                 </a>
                 <a
                   href={MAIL_TO}
