@@ -8,13 +8,13 @@ const points = [
   },
   {
     icon: Shield,
-    title: 'Keine Unsicherheit bei OEM-Nummern',
-    description: 'Wir prüfen die richtige OEM-Nummer für Ihr Fahrzeug manuell.',
+    title: 'Mehr Klarheit bei OEM-Nummern',
+    description: 'Wir gleichen OEM-Nummern manuell mit den verfügbaren Fahrzeugdaten ab.',
   },
   {
     icon: HelpCircle,
     title: 'Persönliche Prüfung statt automatischer Teilesuche',
-    description: 'Ein echter Experte prüft Ihre Anfrage – keine KI, keine Fehler.',
+    description: 'Ein echter Experte prüft Ihre Anfrage persönlich statt per vollautomatischer KI-Zuordnung.',
   },
   {
     icon: Wallet,
@@ -24,7 +24,7 @@ const points = [
   {
     icon: Clock,
     title: 'Ideal, wenn Sie nicht genau wissen, welches Teil passt',
-    description: 'Wir finden das richtige Teil für Sie – auch bei unklarer Bezeichnung.',
+    description: 'Wir helfen, ein geeignetes Teil einzugrenzen – auch bei unklarer Bezeichnung.',
   },
 ]
 

@@ -5,9 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build --configLoader runner",
+    "build": "tsc -b && npm run build:client && npm run build:ssr && node scripts/prerender.mjs",
+    "build:client": "vite build --configLoader runner",
+    "build:ssr": "vite build --ssr src/entry-server.tsx --outDir dist-ssr --configLoader runner",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "validate:prerender": "node scripts/prerender.mjs --validate-only"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

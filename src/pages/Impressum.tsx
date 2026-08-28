@@ -1,17 +1,11 @@
-import { useEffect } from 'react'
 import Navigation from '../sections/Navigation'
 import Footer from '../sections/Footer'
 import StickyWhatsApp from '../sections/StickyWhatsApp'
+import { usePageMetadata } from '../hooks/usePageMetadata'
+import { STATIC_ROUTE_METADATA } from '../lib/routeSeo'
 
 export default function Impressum() {
-  useEffect(() => {
-    window.scrollTo(0, 0)
-    const previousTitle = document.title
-    document.title = 'IMPRESSUM | TeilePilot24'
-    return () => {
-      document.title = previousTitle
-    }
-  }, [])
+  usePageMetadata(STATIC_ROUTE_METADATA['/impressum'])
 
   return (
     <>

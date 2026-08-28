@@ -4,26 +4,26 @@ const steps = [
   {
     number: '1',
     icon: MessageCircle,
-    title: 'WhatsApp senden',
-    description: 'Schreiben Sie uns per WhatsApp, welches Teil Sie benötigen.',
+    title: 'Fahrzeugschein oder VIN senden',
+    description: 'Senden Sie die Fahrzeugdaten einfach per WhatsApp.',
   },
   {
     number: '2',
     icon: Camera,
-    title: 'Fahrzeugschein fotografieren',
-    description: 'Machen Sie ein Foto von Ihrem Fahrzeugschein und senden Sie es uns.',
+    title: 'Ersatzteil beschreiben',
+    description: 'Nennen Sie das gesuchte Teil und ergänzen Sie bei Bedarf ein Foto.',
   },
   {
     number: '3',
     icon: Search,
-    title: 'Wir prüfen VIN & OEM',
-    description: 'Unser Team prüft die VIN und OEM-Nummer manuell – keine automatische KI.',
+    title: 'Persönliche VIN-/OEM-Prüfung',
+    description: 'Unser Team gleicht VIN, Fahrzeugdaten und OEM-Nummern manuell ab.',
   },
   {
     number: '4',
     icon: FileCheck,
-    title: 'Sie erhalten ein Angebot',
-    description: 'Sie bekommen ein passendes Angebot mit dem korrekten Ersatzteil.',
+    title: 'Passendes Angebot erhalten',
+    description: 'Sie erhalten ein persönlich geprüftes Ersatzteil-Angebot.',
   },
 ]
 

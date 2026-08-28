@@ -1,24 +1,20 @@
-import { useEffect, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import Navigation from '../sections/Navigation'
 import Footer from '../sections/Footer'
 import StickyWhatsApp from '../sections/StickyWhatsApp'
+import { usePageMetadata } from '../hooks/usePageMetadata'
+import type { PageMetadata } from '../lib/routeSeo'
 
 interface LegalPageLayoutProps {
   title: string
   intro: string
+  metadata: PageMetadata
   children: ReactNode
 }
 
-export default function LegalPageLayout({ title, intro, children }: LegalPageLayoutProps) {
-  useEffect(() => {
-    window.scrollTo(0, 0)
-    const previousTitle = document.title
-    document.title = `${title} | TeilePilot24`
-    return () => {
-      document.title = previousTitle
-    }
-  }, [title])
+export default function LegalPageLayout({ title, intro, metadata, children }: LegalPageLayoutProps) {
+  usePageMetadata(metadata)
 
   return (
     <>

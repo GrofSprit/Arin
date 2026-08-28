@@ -6,21 +6,13 @@ import Footer from '../sections/Footer'
 import Navigation from '../sections/Navigation'
 import StickyWhatsApp from '../sections/StickyWhatsApp'
 import { WHATSAPP_URL } from '../lib/whatsapp'
-import type { SeoPageData } from '../data/seoPages'
+import { type SeoPageData } from '../data/seoPages'
+import { usePageMetadata } from '../hooks/usePageMetadata'
+import { getSeoPageJsonLd, getSeoPageMetadata } from '../lib/routeSeo'
 
 interface SeoPageLayoutProps {
   page: SeoPageData
   children?: ReactNode
-}
-
-function setMetaDescription(content: string) {
-  let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]')
-  if (!meta) {
-    meta = document.createElement('meta')
-    meta.name = 'description'
-    document.head.appendChild(meta)
-  }
-  meta.content = content
 }
 
 function setJsonLd(id: string, data: unknown) {
@@ -39,60 +31,17 @@ function removeJsonLd(id: string) {
 }
 
 export default function SeoPageLayout({ page, children }: SeoPageLayoutProps) {
+  const secondaryCta = page.secondaryCta ?? { label: 'Ratgeber ansehen', path: '/ratgeber' }
+  usePageMetadata(getSeoPageMetadata(page))
+
   useEffect(() => {
-    window.scrollTo(0, 0)
-    const previousTitle = document.title
-    const previousDescription = document.querySelector<HTMLMetaElement>('meta[name="description"]')?.content
-
-    document.title = page.metaTitle
-    setMetaDescription(page.metaDescription)
-    const pageUrl = `https://www.teilepilot24.de${page.path}`
-    const parentName = page.group === 'marken' ? 'Marken' : page.group === 'teile' ? 'Teile' : 'Ratgeber'
-    const parentPath = page.group === 'marken' ? '/marken' : page.group === 'teile' ? '/teile' : '/ratgeber'
-
-    setJsonLd('seo-breadcrumb-schema', {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Startseite', item: 'https://www.teilepilot24.de/' },
-        { '@type': 'ListItem', position: 2, name: parentName, item: `https://www.teilepilot24.de${parentPath}` },
-        { '@type': 'ListItem', position: 3, name: page.title, item: pageUrl },
-      ],
-    })
-
-    if (page.faq.length > 0) {
-      setJsonLd('seo-faq-schema', {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: page.faq.map((item) => ({
-          '@type': 'Question',
-          name: item.question,
-          acceptedAnswer: { '@type': 'Answer', text: item.answer },
-        })),
-      })
-    } else {
-      removeJsonLd('seo-faq-schema')
-    }
-
-    if (page.path.startsWith('/ratgeber/')) {
-      setJsonLd('seo-article-schema', {
-        '@context': 'https://schema.org',
-        '@type': 'Article',
-        headline: page.title,
-        description: page.metaDescription,
-        mainEntityOfPage: pageUrl,
-        publisher: { '@type': 'Organization', name: 'TeilePilot24' },
-      })
-    } else {
-      removeJsonLd('seo-article-schema')
-    }
+    const schemas = getSeoPageJsonLd(page)
+    const schemaIds = ['seo-breadcrumb-schema', 'seo-faq-schema', 'seo-article-schema']
+    schemaIds.forEach(removeJsonLd)
+    schemas.forEach(({ id, data }) => setJsonLd(id, data))
 
     return () => {
-      document.title = previousTitle
-      if (previousDescription) setMetaDescription(previousDescription)
-      removeJsonLd('seo-breadcrumb-schema')
-      removeJsonLd('seo-faq-schema')
-      removeJsonLd('seo-article-schema')
+      schemaIds.forEach(removeJsonLd)
     }
   }, [page])
 
@@ -117,10 +66,10 @@ export default function SeoPageLayout({ page, children }: SeoPageLayoutProps) {
                   {page.ctaText}
                 </a>
                 <Link
-                  to="/ratgeber"
+                  to={secondaryCta.path}
                   className="inline-flex items-center justify-center gap-2 border border-white/12 px-5 py-3 text-sm font-semibold text-white/82 transition-colors hover:border-electric hover:text-white"
                 >
-                  Ratgeber ansehen
+                  {secondaryCta.label}
                   <ArrowRight size={17} aria-hidden="true" />
                 </Link>
               </div>
@@ -153,6 +102,57 @@ export default function SeoPageLayout({ page, children }: SeoPageLayoutProps) {
                 <section key={section.heading}>
                   <h2 className="text-2xl font-semibold text-midnight md:text-3xl">{section.heading}</h2>
                   <p className="mt-4 text-base leading-[1.8] text-midnight/68 md:text-lg">{section.body}</p>
+                  {section.paragraphs?.map((paragraph) => (
+                    <p key={paragraph} className="mt-4 text-base leading-[1.8] text-midnight/68 md:text-lg">{paragraph}</p>
+                  ))}
+                  {section.subsections?.map((subsection) => (
+                    <div key={subsection.heading} className="mt-6">
+                      <h3 className="text-xl font-semibold text-midnight">{subsection.heading}</h3>
+                      <p className="mt-3 text-base leading-[1.8] text-midnight/68 md:text-lg">{subsection.body}</p>
+                    </div>
+                  ))}
+                  {section.bullets && (
+                    <ul className="mt-5 space-y-3 text-base leading-relaxed text-midnight/68 md:text-lg">
+                      {section.bullets.map((item) => (
+                        <li key={item} className="flex gap-3">
+                          <CheckCircle2 size={18} className="mt-1 flex-shrink-0 text-electric" aria-hidden="true" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {section.table && (
+                    <div className="mt-6 overflow-x-auto border border-silver/80">
+                      <table className="min-w-[680px] w-full border-collapse text-left text-sm md:text-base">
+                        <thead className="bg-midnight text-white">
+                          <tr>
+                            {section.table.headers.map((header) => (
+                              <th key={header} scope="col" className="px-4 py-3 font-semibold">{header}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-silver/80">
+                          {section.table.rows.map((row) => (
+                            <tr key={row[0]} className="align-top">
+                              {row.map((cell, index) => (
+                                <td key={cell} className={`px-4 py-3 leading-relaxed text-midnight/68 ${index === 0 ? 'font-semibold text-midnight' : ''}`}>{cell}</td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                  {section.links && (
+                    <nav aria-label={`${section.heading}: weiterführende Seiten`} className="mt-5 flex flex-wrap gap-3">
+                      {section.links.map((link) => (
+                        <Link key={link.path} to={link.path} className="inline-flex items-center gap-2 border border-electric/25 bg-electric/5 px-4 py-2.5 text-sm font-semibold text-electric transition-colors hover:border-electric/50 hover:bg-electric/10">
+                          {link.label}
+                          <ArrowRight size={15} aria-hidden="true" />
+                        </Link>
+                      ))}
+                    </nav>
+                  )}
                 </section>
               ))}
               {page.linkGroups?.map((group) => (

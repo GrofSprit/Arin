@@ -8,7 +8,7 @@ interface NavigationProps {
 }
 
 export default function Navigation({ transparent = true }: NavigationProps) {
-  const [scrolled, setScrolled] = useState(() => !transparent || window.scrollY > 80)
+  const [scrolled, setScrolled] = useState(() => !transparent)
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()

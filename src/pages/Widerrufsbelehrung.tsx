@@ -1,18 +1,12 @@
-import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Navigation from '../sections/Navigation'
 import Footer from '../sections/Footer'
 import StickyWhatsApp from '../sections/StickyWhatsApp'
+import { usePageMetadata } from '../hooks/usePageMetadata'
+import { STATIC_ROUTE_METADATA } from '../lib/routeSeo'
 
 export default function Widerrufsbelehrung() {
-  useEffect(() => {
-    window.scrollTo(0, 0)
-    const previousTitle = document.title
-    document.title = 'Widerrufsbelehrung | TeilePilot24'
-    return () => {
-      document.title = previousTitle
-    }
-  }, [])
+  usePageMetadata(STATIC_ROUTE_METADATA['/widerrufsbelehrung'])
 
   return (
     <>

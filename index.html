@@ -4,15 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="google-site-verification" content="AaRD_E6kGtKLNx0Gao47bOt8pUmNZb6tnEgKByN8PF0" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Fahrzeugschein per WhatsApp senden und passendes Ersatzteil finden lassen. Ein Service von B&amp;C Fahrzeugteile aus Mönchengladbach." />
+    <meta name="description" content="Fahrzeugschein oder VIN per WhatsApp senden: TeilePilot24 prüft Fahrzeugdaten und OEM-Nummern persönlich und erstellt ein passendes Ersatzteil-Angebot." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#14213D" />
-    <meta property="og:title" content="TeilePilot24 - Ersatzteile per WhatsApp anfragen" />
-    <meta property="og:description" content="Fahrzeugschein per WhatsApp senden und passendes Ersatzteil finden lassen. Ein Service von B&amp;C Fahrzeugteile aus Mönchengladbach." />
+    <link rel="canonical" href="https://www.teilepilot24.de/" />
+
+    <meta property="og:title" content="Autoersatzteile mit VIN- &amp; OEM-Prüfung | TeilePilot24" />
+    <meta property="og:description" content="Fahrzeugschein oder VIN per WhatsApp senden: persönliche Prüfung von Fahrzeugdaten und OEM-Nummern, danach erhalten Sie ein passendes Ersatzteil-Angebot." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.teilepilot24.de/" />
-    <meta property="og:image" content="https://www.teilepilot24.de/apple-touch-icon.png" />
+    <meta property="og:site_name" content="TeilePilot24" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:image" content="https://www.teilepilot24.de/logo-icon.png" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta property="og:image:alt" content="TeilePilot24 Logo" />
 
-    <title>TeilePilot24 - Ersatzteile per WhatsApp anfragen</title>
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Autoersatzteile mit VIN- &amp; OEM-Prüfung | TeilePilot24" />
+    <meta name="twitter:description" content="Fahrzeugschein oder VIN senden, persönlich prüfen lassen und ein passendes Ersatzteil-Angebot erhalten." />
+    <meta name="twitter:image" content="https://www.teilepilot24.de/logo-icon.png" />
+    <meta name="twitter:image:alt" content="TeilePilot24 Logo" />
+
+    <title>Autoersatzteile mit VIN- &amp; OEM-Prüfung | TeilePilot24</title>
 
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="icon" sizes="32x32" href="/favicon.png" type="image/png" />
@@ -23,52 +37,52 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": ["AutoPartsStore", "LocalBusiness"],
-        "name": "TeilePilot24",
-        "url": "https://www.teilepilot24.de/",
-        "inLanguage": "de-DE",
-        "telephone": "+491773773486",
-        "areaServed": {
-          "@type": "Country",
-          "name": "Germany"
-        },
-        "description": "TeilePilot24 hilft Kunden in Deutschland, das passende Autoersatzteil per WhatsApp zu finden. Kunden senden Fahrzeugschein oder VIN/Fahrgestellnummer. Danach werden VIN, OEM-Nummern und Fahrzeugdaten manuell geprüft.",
-        "hasOfferCatalog": {
-          "@type": "OfferCatalog",
-          "name": "Autoersatzteil-Services",
-          "itemListElement": [
-            {
-              "@type": "Offer",
-              "itemOffered": {
-                "@type": "Service",
-                "name": "Ersatzteilberatung"
-              }
+        "@graph": [
+          {
+            "@type": "AutoPartsStore",
+            "@id": "https://www.teilepilot24.de/#business",
+            "name": "B&C Fahrzeugteile",
+            "alternateName": "TeilePilot24",
+            "url": "https://www.teilepilot24.de/",
+            "logo": "https://www.teilepilot24.de/logo-icon.png",
+            "image": "https://www.teilepilot24.de/logo-icon.png",
+            "description": "Persönliche Beratung für Autoersatzteile: Kunden senden Fahrzeugschein oder VIN, anschließend werden Fahrzeugdaten und OEM-Nummern manuell geprüft.",
+            "telephone": "+49 2166 5558747",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Limitenstraße 111",
+              "postalCode": "41236",
+              "addressLocality": "Mönchengladbach",
+              "addressCountry": "DE"
             },
-            {
-              "@type": "Offer",
-              "itemOffered": {
-                "@type": "Service",
-                "name": "VIN-Prüfung"
-              }
+            "areaServed": {
+              "@type": "Country",
+              "name": "Deutschland"
             },
-            {
-              "@type": "Offer",
-              "itemOffered": {
-                "@type": "Service",
-                "name": "OEM-Prüfung"
+            "openingHoursSpecification": [
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "08:00",
+                "closes": "18:00"
               }
-            },
-            {
-              "@type": "Offer",
-              "itemOffered": {
-                "@type": "Service",
-                "name": "Autoersatzteile per WhatsApp"
-              }
+            ],
+            "brand": {
+              "@type": "Brand",
+              "name": "TeilePilot24"
             }
-          ]
-        },
-        "currenciesAccepted": "EUR",
-        "paymentAccepted": ["CreditCard", "DebitCard", "BankTransfer"]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://www.teilepilot24.de/#website",
+            "url": "https://www.teilepilot24.de/",
+            "name": "TeilePilot24",
+            "inLanguage": "de-DE",
+            "publisher": {
+              "@id": "https://www.teilepilot24.de/#business"
+            }
+          }
+        ]
       }
     </script>
 

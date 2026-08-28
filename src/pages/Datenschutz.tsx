@@ -1,10 +1,12 @@
 import LegalPageLayout from '../components/LegalPageLayout'
+import { STATIC_ROUTE_METADATA } from '../lib/routeSeo'
 
 export default function Datenschutz() {
   return (
     <LegalPageLayout
       title="Datenschutzerklärung"
       intro="Informationen zur Verarbeitung personenbezogener Daten beim Besuch dieser Website und bei einer Kontaktaufnahme."
+      metadata={STATIC_ROUTE_METADATA['/datenschutz']}
     >
       <section>
         <h2>1. Verantwortlicher</h2>

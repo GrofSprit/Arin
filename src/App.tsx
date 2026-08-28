@@ -8,6 +8,7 @@ import Datenschutz from './pages/Datenschutz'
 import Widerrufsbelehrung from './pages/Widerrufsbelehrung'
 import Widerrufsformular from './pages/Widerrufsformular'
 import SeoPage from './pages/SeoPage'
+import NotFound from './pages/NotFound'
 import { seoPages } from './data/seoPages'
 import CookieBanner from './components/CookieBanner'
 
@@ -24,6 +25,7 @@ export default function App() {
         {seoPages.map((page) => (
           <Route key={page.path} path={page.path} element={<SeoPage />} />
         ))}
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Analytics />

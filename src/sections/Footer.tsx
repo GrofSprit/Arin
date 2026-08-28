@@ -19,6 +19,12 @@ export default function Footer() {
               Das passende Ersatzteil. Ohne Stress. Wir prüfen die VIN und finden das richtige Teil für Ihr Fahrzeug.
             </p>
             <p className="text-sm text-white/65 mt-4">Ein Service von <strong className="text-white font-semibold">B&amp;C Fahrzeugteile</strong></p>
+            <nav aria-label="TeilePilot24 Inhalte" className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+              <Link to="/marken" className="text-sm text-white/50 hover:text-white/80 transition-colors">Automarken</Link>
+              <Link to="/teile" className="text-sm text-white/50 hover:text-white/80 transition-colors">Teilekategorien</Link>
+              <Link to="/ratgeber" className="text-sm text-white/50 hover:text-white/80 transition-colors">Ratgeber</Link>
+              <Link to="/faq" className="text-sm text-white/50 hover:text-white/80 transition-colors">FAQ</Link>
+            </nav>
           </div>
 
           {/* Business information */}

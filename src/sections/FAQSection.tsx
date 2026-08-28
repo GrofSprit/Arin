@@ -20,7 +20,7 @@ const faqs = [
   },
   {
     question: 'Prüfen Sie die Teile automatisch mit KI?',
-    answer: 'Nein. Die Teileauswahl wird von einer echten Person manuell geprüft. Wir lesen die VIN aus, prüfen die OEM-Kompatibilität und stellen sicher, dass das Teil wirklich zu Ihrem Fahrzeug passt. Keine automatische KI-Zuordnung.',
+    answer: 'Nein. Unser Team prüft die Teileauswahl manuell, liest die VIN aus und gleicht die OEM-Kompatibilität mit den verfügbaren Fahrzeugdaten ab. So reduzieren wir das Risiko einer Fehlzuordnung; eine automatische KI-Zuordnung findet nicht statt.',
   },
   {
     question: 'Wie läuft der Versand ab?',

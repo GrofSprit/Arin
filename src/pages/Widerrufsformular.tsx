@@ -1,21 +1,15 @@
-import { useEffect } from 'react'
 import { Download, Mail } from 'lucide-react'
 import Navigation from '../sections/Navigation'
 import Footer from '../sections/Footer'
 import StickyWhatsApp from '../sections/StickyWhatsApp'
+import { usePageMetadata } from '../hooks/usePageMetadata'
+import { STATIC_ROUTE_METADATA } from '../lib/routeSeo'
 
 const PDF_URL = '/widerrufsformular-kfz-teile.pdf'
 const MAIL_TO = 'mailto:aa@bc-fahrzeugteile.de?subject=Widerruf%20TeilePilot24'
 
 export default function Widerrufsformular() {
-  useEffect(() => {
-    window.scrollTo(0, 0)
-    const previousTitle = document.title
-    document.title = 'Widerrufsformular | TeilePilot24'
-    return () => {
-      document.title = previousTitle
-    }
-  }, [])
+  usePageMetadata(STATIC_ROUTE_METADATA['/widerrufsformular'])
 
   return (
     <>

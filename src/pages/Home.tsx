@@ -10,9 +10,12 @@ import FinalCTA from '../sections/FinalCTA'
 import Footer from '../sections/Footer'
 import StickyWhatsApp from '../sections/StickyWhatsApp'
 import { useScrollEntrance } from '../hooks/useScrollEntrance'
+import { usePageMetadata } from '../hooks/usePageMetadata'
+import { STATIC_ROUTE_METADATA } from '../lib/routeSeo'
 
 export default function Home() {
   useScrollEntrance()
+  usePageMetadata(STATIC_ROUTE_METADATA['/'])
 
   return (
     <>

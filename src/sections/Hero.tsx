@@ -49,10 +49,10 @@ export default function Hero() {
           <div className="order-2 lg:order-1">
             <h1 className="hero-entrance animate-hero-headline text-[34px] md:text-[50px] lg:text-[58px] text-white font-semibold mb-5 leading-[1.08] tracking-tight">
               Auto kaputt?<br />
-              Ersatzteil in wenigen Minuten finden.
+              Passendes Ersatzteil-Angebot anfragen.
             </h1>
             <p className="hero-entrance animate-hero-desc text-base md:text-lg text-white/65 max-w-lg mb-6 leading-relaxed">
-              Senden Sie uns Ihren Fahrzeugschein oder Ihre VIN per WhatsApp. Wir prüfen VIN, OEM-Nummern und Fahrzeugdaten manuell und finden das passende Ersatzteil für Ihr Fahrzeug.
+              Fahrzeugschein oder VIN per WhatsApp senden, Fahrzeugdaten und OEM-Nummern persönlich prüfen lassen und ein passendes Ersatzteil-Angebot erhalten. In der Regel antworten wir innerhalb von 24 Stunden werktags, bei komplexen Anfragen innerhalb von 48 Stunden.
             </p>
             <p className="hero-entrance animate-hero-desc text-sm md:text-base text-electric font-semibold mb-5" style={{ transitionDelay: '0.05s' }}>
               Powered by B&amp;C Fahrzeugteile
