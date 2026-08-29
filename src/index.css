@@ -63,7 +63,7 @@
   .trust-marquee {
     display: flex;
     width: max-content;
-    animation: trust-marquee 38s linear infinite;
+    animation: trust-marquee 48s linear infinite;
     will-change: transform;
   }
 
@@ -72,7 +72,9 @@
     align-items: center;
     flex-shrink: 0;
     min-width: 100vw;
-    justify-content: space-around;
+    justify-content: flex-start;
+    gap: 2.5rem;
+    padding-inline: 2.5rem;
   }
 
   .legal-content section + section {

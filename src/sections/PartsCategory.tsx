@@ -30,7 +30,7 @@ export default function PartsCategory() {
           <h2 className="entrance-headline text-2xl md:text-3xl lg:text-[38px] text-midnight font-semibold mb-3 tracking-tight">
             Beliebte Ersatzteile
           </h2>
-          <p className="entrance text-base text-midnight/55 max-w-2xl mx-auto" style={{ transitionDelay: '0.1s' }}>
+          <p className="entrance mx-auto max-w-2xl text-base text-midnight/65" style={{ transitionDelay: '0.1s' }}>
             Entdecken Sie häufig gesuchte Teile. Für die Auswahl können Fahrzeugdaten, VIN und vorhandene OEM-Nummern persönlich geprüft werden.
           </p>
         </div>
@@ -50,7 +50,7 @@ export default function PartsCategory() {
                 <ArrowRight size={18} className="mt-1 text-midnight/25 transition-all group-hover:translate-x-1 group-hover:text-electric" aria-hidden="true" />
               </div>
               <h3 className="text-sm font-semibold text-midnight md:text-base">{part.name}</h3>
-              <p className="mt-1.5 text-xs leading-relaxed text-midnight/55 md:mt-2 md:text-sm">{part.description}</p>
+              <p className="mt-1.5 text-xs leading-relaxed text-midnight/70 md:mt-2 md:text-sm">{part.description}</p>
             </Link>
           ))}
         </div>

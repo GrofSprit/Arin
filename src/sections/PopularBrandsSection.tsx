@@ -2,11 +2,11 @@ import { ArrowRight, CarFront } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const brands = [
-  { name: 'Volkswagen', shortName: 'VW', path: '/vw-ersatzteile' },
-  { name: 'BMW', shortName: 'BMW', path: '/bmw-ersatzteile' },
-  { name: 'Mercedes-Benz', shortName: 'MB', path: '/mercedes-ersatzteile' },
-  { name: 'Audi', shortName: 'Audi', path: '/audi-ersatzteile' },
-  { name: 'Opel', shortName: 'Opel', path: '/opel-ersatzteile' },
+  { name: 'Volkswagen', path: '/vw-ersatzteile' },
+  { name: 'BMW', path: '/bmw-ersatzteile' },
+  { name: 'Mercedes-Benz', path: '/mercedes-ersatzteile' },
+  { name: 'Audi', path: '/audi-ersatzteile' },
+  { name: 'Opel', path: '/opel-ersatzteile' },
 ]
 
 export default function PopularBrandsSection() {
@@ -30,17 +30,15 @@ export default function PopularBrandsSection() {
             <Link
               key={brand.path}
               to={brand.path}
-              className="entrance group relative flex min-h-[84px] items-center gap-3 bg-white p-3 pr-8 shadow-sm transition-all duration-300 last:col-span-2 hover:-translate-y-1 hover:shadow-card focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-electric/30 sm:last:col-span-1 lg:min-h-40 lg:block lg:p-5"
+              className="entrance group relative flex min-h-32 flex-col justify-between border border-silver/70 bg-white p-4 shadow-sm transition-all duration-300 last:col-span-2 hover:-translate-y-1 hover:border-electric/25 hover:shadow-card focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-electric/30 sm:last:col-span-1 lg:min-h-40 lg:p-5"
               style={{ transitionDelay: `${index * 0.07}s` }}
             >
-              <span className="flex h-9 min-w-9 items-center justify-center bg-midnight px-1.5 text-[11px] font-semibold text-white lg:h-12 lg:min-w-12 lg:px-2 lg:text-xs" aria-hidden="true">
-                {brand.shortName}
-              </span>
-              <div className="min-w-0 lg:mt-6">
-                <h3 className="text-sm font-semibold text-midnight lg:text-base">{brand.name}</h3>
-                <p className="mt-1 hidden text-sm leading-relaxed text-midnight/50 lg:block">Ersatzteile nach Fahrzeugdaten finden</p>
+              <div className="min-w-0">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-electric/80">Fahrzeugmarke</span>
+                <h3 className="mt-2 whitespace-nowrap text-[15px] font-semibold tracking-tight text-midnight lg:text-lg">{brand.name}</h3>
+                <p className="mt-1 text-xs leading-relaxed text-midnight/60 lg:text-sm">Ersatzteile nach Fahrzeugdaten</p>
               </div>
-              <ArrowRight size={17} className="absolute right-3 top-1/2 -translate-y-1/2 text-midnight/25 transition-all group-hover:translate-x-1 group-hover:text-electric lg:right-5 lg:top-5 lg:translate-y-0" aria-hidden="true" />
+              <ArrowRight size={18} className="absolute right-4 top-4 text-midnight/30 transition-all group-hover:translate-x-1 group-hover:text-electric lg:right-5 lg:top-5" aria-hidden="true" />
             </Link>
           ))}
         </div>

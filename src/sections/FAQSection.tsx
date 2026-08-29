@@ -72,9 +72,9 @@ export default function FAQSection() {
   }, [])
 
   return (
-    <section id="faq" className="bg-white py-14 md:py-20 lg:py-24">
+    <section id="faq" className="bg-white py-10 md:py-14 lg:py-16">
       <div className="max-w-[800px] mx-auto px-5 md:px-10 lg:px-12">
-        <div className="text-center mb-8 md:mb-12">
+        <div className="mb-7 text-center md:mb-10">
           <h2 className="entrance-headline text-2xl md:text-3xl lg:text-[38px] text-midnight font-semibold mb-3">
             Häufige Fragen
           </h2>

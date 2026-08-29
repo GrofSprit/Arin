@@ -4,9 +4,9 @@ import { GOOGLE_MAPS_URL } from '../lib/externalLinks'
 
 export default function CompanySection() {
   return (
-    <section aria-labelledby="company-title" className="bg-silver/40 py-14 md:py-20 lg:py-24">
+    <section aria-labelledby="company-title" className="bg-silver/40 py-12 md:py-16 lg:py-20">
       <div className="max-w-[1200px] mx-auto px-5 md:px-10 lg:px-12">
-        <div className="grid gap-7 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-10">
+        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-8">
           <div>
             <p className="entrance inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-electric mb-3">
               <Store size={14} aria-hidden="true" />
@@ -18,7 +18,7 @@ export default function CompanySection() {
             <p className="entrance text-base text-midnight/60 leading-relaxed max-w-xl" style={{ transitionDelay: '0.1s' }}>
               TeilePilot24 ist der digitale Anfrage-Service von B&amp;C Fahrzeugteile in Mönchengladbach. Das Team übernimmt die persönliche Prüfung Ihrer Fahrzeug- und Teileinformationen und erstellt anschließend das Angebot.
             </p>
-            <div className="entrance mt-6 border border-silver bg-white p-5 shadow-sm md:p-6" style={{ transitionDelay: '0.15s' }}>
+            <div className="entrance mt-5 border border-silver bg-white p-5 shadow-sm md:p-6" style={{ transitionDelay: '0.15s' }}>
               <div className="flex items-start gap-4">
                 <span className="w-11 h-11 bg-electric/10 flex items-center justify-center flex-shrink-0">
                   <MapPin size={22} className="text-electric" aria-hidden="true" />
