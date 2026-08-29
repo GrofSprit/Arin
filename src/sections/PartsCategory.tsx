@@ -10,6 +10,7 @@ import {
   Settings,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import VinWhatsAppCheck from '../components/VinWhatsAppCheck'
 
 const parts = [
   { name: 'Bremsbeläge', path: '/bremsbelaege', description: 'Ausführung und Fahrzeugvariante eingrenzen.', icon: CircleDot },
@@ -34,6 +35,8 @@ export default function PartsCategory() {
             Entdecken Sie häufig gesuchte Teile. Für die Auswahl können Fahrzeugdaten, VIN und vorhandene OEM-Nummern persönlich geprüft werden.
           </p>
         </div>
+
+        <VinWhatsAppCheck />
 
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 md:gap-4">
           {parts.map((part, i) => (
