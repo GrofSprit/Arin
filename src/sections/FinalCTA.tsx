@@ -8,11 +8,11 @@ export default function FinalCTA() {
         background: 'radial-gradient(ellipse 800px 400px at 50% 100%, rgba(67, 97, 238, 0.12), transparent)'
       }} />
 
-      <div className="relative max-w-[800px] mx-auto px-5 md:px-10 lg:px-12 py-20 md:py-28 lg:py-32 text-center">
-        <h2 className="entrance-headline text-3xl md:text-4xl lg:text-[46px] text-white font-semibold mb-5 leading-tight">
+      <div className="relative max-w-[800px] mx-auto px-5 py-16 text-center md:px-10 md:py-24 lg:px-12 lg:py-28">
+        <h2 className="entrance-headline text-3xl md:text-4xl lg:text-[42px] text-white font-semibold mb-5 leading-tight">
           Welches Ersatzteil brauchen Sie?
         </h2>
-        <p className="entrance text-base md:text-lg text-white/55 mb-10 max-w-md mx-auto" style={{ transitionDelay: '0.1s' }}>
+        <p className="entrance text-base md:text-lg text-white/55 mb-8 max-w-md mx-auto" style={{ transitionDelay: '0.1s' }}>
           Fahrzeugdaten senden, benötigtes Teil nennen und ein unverbindliches persönliches Angebot erhalten.
         </p>
         <div className="entrance" style={{ transitionDelay: '0.2s' }}>

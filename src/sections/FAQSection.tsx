@@ -41,7 +41,7 @@ function FAQItem({ question, answer, isOpen, onToggle }: {
     <div className="border-b border-silver/70">
       <button
         onClick={onToggle}
-        className="w-full min-h-[72px] flex items-center justify-between py-6 md:py-7 text-left group cursor-pointer select-none touch-manipulation"
+        className="w-full min-h-16 flex items-center justify-between py-5 md:py-6 text-left group cursor-pointer select-none touch-manipulation"
         aria-expanded={isOpen}
         aria-controls={answerId}
         type="button"
@@ -55,7 +55,7 @@ function FAQItem({ question, answer, isOpen, onToggle }: {
       </button>
       <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
         <div className="min-h-0 overflow-hidden">
-          <div id={answerId} role="region" className="pb-7 md:pb-8 pr-2 md:pr-12">
+          <div id={answerId} role="region" className="pb-6 md:pb-7 pr-2 md:pr-12">
             <p className="text-base md:text-[17px] text-midnight/75 leading-[1.7]">{answer}</p>
           </div>
         </div>
@@ -72,13 +72,13 @@ export default function FAQSection() {
   }, [])
 
   return (
-    <section id="faq" className="bg-white py-16 md:py-24 lg:py-32">
+    <section id="faq" className="bg-white py-14 md:py-20 lg:py-24">
       <div className="max-w-[800px] mx-auto px-5 md:px-10 lg:px-12">
-        <div className="text-center mb-10 md:mb-14">
-          <h2 className="entrance-headline text-3xl md:text-4xl lg:text-[42px] text-midnight font-semibold mb-4">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="entrance-headline text-2xl md:text-3xl lg:text-[38px] text-midnight font-semibold mb-3">
             Häufige Fragen
           </h2>
-          <p className="entrance text-base md:text-lg text-midnight/55" style={{ transitionDelay: '0.1s' }}>
+          <p className="entrance text-base text-midnight/55" style={{ transitionDelay: '0.1s' }}>
             Alles, was Sie über TeilePilot24 wissen sollten.
           </p>
         </div>
