@@ -1,11 +1,23 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Menu, X } from 'lucide-react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { WHATSAPP_URL } from '../lib/whatsapp'
 
 interface NavigationProps {
   transparent?: boolean
 }
+
+const routeLinks = [
+  { label: 'Ersatzteile', path: '/teile' },
+  { label: 'Automarken', path: '/marken' },
+  { label: 'Ratgeber', path: '/ratgeber' },
+  { label: 'FAQ', path: '/faq' },
+]
+
+const sectionLinks = [
+  { label: "So funktioniert's", id: 'how-it-works' },
+  { label: 'Bewertungen', id: 'reviews' },
+]
 
 export default function Navigation({ transparent = true }: NavigationProps) {
   const [scrolled, setScrolled] = useState(() => !transparent)
@@ -67,14 +79,6 @@ export default function Navigation({ transparent = true }: NavigationProps) {
     }
   }, [location.pathname, navigate])
 
-  const navLinks = [
-    { label: "So funktioniert's", id: 'how-it-works' },
-    { label: 'Teile', id: 'parts' },
-    { label: 'Vorteile', id: 'advantages' },
-    { label: 'Bewertungen', id: 'reviews' },
-    { label: 'FAQ', id: 'faq' },
-  ]
-
   const isDark = transparent && !scrolled
 
   return (
@@ -89,16 +93,29 @@ export default function Navigation({ transparent = true }: NavigationProps) {
           </button>
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => scrollToSection(link.id)}
-                className={`text-sm font-medium transition-colors duration-200 hover:text-electric ${isDark ? 'text-white/70' : 'text-midnight/70'}`}
-              >
-                {link.label}
-              </button>
-            ))}
+          <div className="hidden lg:flex items-center gap-5 xl:gap-7">
+            <nav aria-label="Hauptnavigation" className="flex items-center gap-5 xl:gap-7">
+              {routeLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`text-sm font-medium transition-colors duration-200 hover:text-electric ${isDark ? 'text-white/70' : 'text-midnight/70'}`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <div className="hidden xl:flex items-center gap-7">
+                {sectionLinks.map((link) => (
+                  <button
+                    key={link.id}
+                    onClick={() => scrollToSection(link.id)}
+                    className={`text-sm font-medium transition-colors duration-200 hover:text-electric ${isDark ? 'text-white/70' : 'text-midnight/70'}`}
+                  >
+                    {link.label}
+                  </button>
+                ))}
+              </div>
+            </nav>
             <a
               href={WHATSAPP_URL}
               target="_blank"
@@ -122,9 +139,19 @@ export default function Navigation({ transparent = true }: NavigationProps) {
         {/* Backdrop */}
         <div className={`absolute inset-0 bg-midnight/60 transition-opacity duration-300 ${mobileOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setMobileOpen(false)} />
         {/* Panel */}
-        <div id="mobile-navigation" className={`absolute top-[72px] left-0 right-0 bg-white shadow-2xl transition-all duration-300 ${mobileOpen ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'}`}>
+        <div id="mobile-navigation" className={`absolute top-[72px] left-0 right-0 max-h-[calc(100dvh-72px)] overflow-y-auto bg-white shadow-2xl transition-all duration-300 ${mobileOpen ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'}`}>
           <div className="flex flex-col p-6 gap-1">
-            {navLinks.map((link) => (
+            {routeLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                onClick={() => setMobileOpen(false)}
+                className="text-left text-base font-medium text-midnight py-3 px-2 hover:text-electric transition-colors border-b border-silver/40"
+              >
+                {link.label}
+              </Link>
+            ))}
+            {sectionLinks.map((link) => (
               <button
                 key={link.id}
                 onClick={() => scrollToSection(link.id)}

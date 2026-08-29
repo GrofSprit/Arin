@@ -4,6 +4,8 @@ import Hero from '../sections/Hero'
 import TrustSection from '../sections/TrustSection'
 import ReviewsSection from '../sections/ReviewsSection'
 import PartsCategory from '../sections/PartsCategory'
+import PopularBrandsSection from '../sections/PopularBrandsSection'
+import PartsSearchHelpSection from '../sections/PartsSearchHelpSection'
 import HowItWorks from '../sections/HowItWorks'
 import FAQSection from '../sections/FAQSection'
 import FinalCTA from '../sections/FinalCTA'
@@ -26,6 +28,8 @@ export default function Home() {
         <TrustSection />
         <ReviewsSection />
         <PartsCategory />
+        <PopularBrandsSection />
+        <PartsSearchHelpSection />
         <HowItWorks />
         <FAQSection />
         <FinalCTA />
