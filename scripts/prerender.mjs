@@ -9,6 +9,10 @@ const sitemapFile = path.join(distDir, 'sitemap.xml')
 const validateOnly = process.argv.includes('--validate-only')
 const siteOrigin = 'https://www.teilepilot24.de'
 
+// Vite externalizes React for the SSR bundle. Keep the build-time renderer on
+// the same production React branch as the browser bundle to avoid markup drift.
+process.env.NODE_ENV = 'production'
+
 function assert(condition, message) {
   if (!condition) throw new Error(message)
 }
@@ -143,6 +147,12 @@ function getSingleCanonical(html, pathname) {
   return tags[0].href
 }
 
+function getCanonicalTags(html) {
+  return [...html.matchAll(/<link\s+[^>]*>/gi)]
+    .map((match) => parseAttributes(match[0]))
+    .filter((attributes) => attributes.rel === 'canonical')
+}
+
 function collectHtmlFiles(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const fullPath = path.join(directory, entry.name)
@@ -185,9 +195,34 @@ function validateDocument(pathname, html, expected) {
   const globalSchemaExists = jsonLdTags.some((match) => match[3].includes('AutoPartsStore') && match[3].includes('WebSite'))
   assert(globalSchemaExists, `${pathname}: global AutoPartsStore/WebSite schema is missing`)
 
-  for (const match of html.matchAll(/(?:src|href)=["'](\/assets\/[^"']+)["']/g)) {
-    const assetPath = match[1].split(/[?#]/)[0]
-    assert(existsSync(path.join(distDir, assetPath.slice(1))), `${pathname}: referenced asset is missing: ${assetPath}`)
+  for (const match of html.matchAll(/<(?:img|link|script)\s+[^>]*>/gi)) {
+    const attributes = parseAttributes(match[0])
+    const resourceUrl = attributes.src ?? attributes.href
+    if (!resourceUrl?.startsWith('/') || resourceUrl.startsWith('//')) continue
+    const resourcePath = resourceUrl.split(/[?#]/)[0]
+    assert(existsSync(path.join(distDir, resourcePath.slice(1))), `${pathname}: referenced asset is missing: ${resourcePath}`)
+  }
+}
+
+function validateNotFoundDocument(html, expected) {
+  const pathname = '/404.html'
+  const { metadata } = expected
+  const titleMatches = [...html.matchAll(/<title>([\s\S]*?)<\/title>/gi)]
+  assert(titleMatches.length === 1, `${pathname}: expected exactly one title, found ${titleMatches.length}`)
+  assert(decodeHtml(titleMatches[0][1]) === metadata.title, `${pathname}: title does not match route data`)
+  assert(getSingleMeta(html, 'name', 'description', pathname) === metadata.description, `${pathname}: description does not match route data`)
+  assert(getSingleMeta(html, 'name', 'robots', pathname) === 'noindex, follow', `${pathname}: robots must be noindex, follow`)
+  assert(getCanonicalTags(html).length === 0, `${pathname}: a generic 404 must not have a canonical`)
+  assert(getMetaTags(html, 'property', 'og:url').length === 0, `${pathname}: a generic 404 must not have og:url`)
+  assert(html.includes('<div id="root">') && !html.includes('<div id="root"></div>'), `${pathname}: prerendered #root is empty`)
+  assert(/<h1(?:\s[^>]*)?>[\s\S]*?<\/h1>/i.test(html), `${pathname}: static body has no H1`)
+
+  for (const match of html.matchAll(/<(?:img|link|script)\s+[^>]*>/gi)) {
+    const attributes = parseAttributes(match[0])
+    const resourceUrl = attributes.src ?? attributes.href
+    if (!resourceUrl?.startsWith('/') || resourceUrl.startsWith('//')) continue
+    const resourcePath = resourceUrl.split(/[?#]/)[0]
+    assert(existsSync(path.join(distDir, resourcePath.slice(1))), `${pathname}: referenced asset is missing: ${resourcePath}`)
   }
 }
 
@@ -204,29 +239,59 @@ assert(samePathSet(sitemapPaths, manifest.indexablePaths), 'Sitemap and central 
 assert(!sitemapPaths.some((pathname) => manifest.noindexPaths.includes(pathname)), 'Sitemap contains a noindex route')
 assert(!manifest.legalPaths.some((pathname) => sitemapPaths.includes(pathname)), 'Legal routes must remain outside the sitemap')
 
-const prerenderPaths = [...manifest.indexablePaths, ...manifest.legalPaths]
+const prerenderPaths = [...manifest.indexablePaths, ...manifest.legalPaths, ...manifest.noindexPaths]
 assert(new Set(prerenderPaths).size === prerenderPaths.length, 'Prerender route list contains duplicates')
+const routeResults = new Map(prerenderPaths.map((pathname) => [pathname, serverModule.render(pathname)]))
+const notFoundResult = serverModule.renderNotFound()
+const auxiliaryResults = new Map([['/success', serverModule.renderSuccess()]])
+const indexableTitles = manifest.indexablePaths.map((pathname) => routeResults.get(pathname).metadata.title)
+const indexableCanonicals = manifest.indexablePaths.map((pathname) => routeResults.get(pathname).metadata.canonicalPath)
+assert(new Set(indexableTitles).size === indexableTitles.length, 'Indexable prerender routes contain duplicate titles')
+assert(new Set(indexableCanonicals).size === indexableCanonicals.length, 'Indexable prerender routes contain duplicate canonicals')
+
+for (const pathname of manifest.indexablePaths) {
+  const robots = routeResults.get(pathname).metadata.robots ?? 'index, follow, max-image-preview:large'
+  assert(!robots.toLowerCase().includes('noindex'), `${pathname}: sitemap route is unexpectedly noindex`)
+}
+
+for (const pathname of manifest.noindexPaths) {
+  const robots = routeResults.get(pathname).metadata.robots ?? ''
+  assert(robots.toLowerCase().includes('noindex'), `${pathname}: central noindex state was lost`)
+}
 
 if (!validateOnly) {
   const template = readFileSync(path.join(distDir, 'index.html'), 'utf8')
   for (const pathname of prerenderPaths) {
     const outputFile = outputFileForPath(pathname)
     mkdirSync(path.dirname(outputFile), { recursive: true })
-    writeFileSync(outputFile, renderDocument(template, serverModule.render(pathname)), 'utf8')
+    writeFileSync(outputFile, renderDocument(template, routeResults.get(pathname)), 'utf8')
   }
+  for (const [pathname, result] of auxiliaryResults) {
+    const outputFile = outputFileForPath(pathname)
+    mkdirSync(path.dirname(outputFile), { recursive: true })
+    writeFileSync(outputFile, renderDocument(template, result), 'utf8')
+  }
+  writeFileSync(path.join(distDir, '404.html'), renderDocument(template, notFoundResult), 'utf8')
 }
 
 for (const pathname of prerenderPaths) {
   const outputFile = outputFileForPath(pathname)
   assert(existsSync(outputFile), `${pathname}: prerendered HTML file is missing`)
-  validateDocument(pathname, readFileSync(outputFile, 'utf8'), serverModule.render(pathname))
+  validateDocument(pathname, readFileSync(outputFile, 'utf8'), routeResults.get(pathname))
 }
 
-for (const pathname of manifest.noindexPaths) {
-  assert(!existsSync(outputFileForPath(pathname)), `${pathname}: noindex route was unexpectedly prerendered`)
+for (const [pathname, result] of auxiliaryResults) {
+  const outputFile = outputFileForPath(pathname)
+  assert(existsSync(outputFile), `${pathname}: auxiliary HTML file is missing`)
+  validateDocument(pathname, readFileSync(outputFile, 'utf8'), result)
 }
+
+const notFoundFile = path.join(distDir, '404.html')
+assert(existsSync(notFoundFile), '/404.html: prerendered HTML file is missing')
+validateNotFoundDocument(readFileSync(notFoundFile, 'utf8'), notFoundResult)
 
 const htmlFiles = collectHtmlFiles(distDir)
-assert(htmlFiles.length === prerenderPaths.length, `Expected ${prerenderPaths.length} HTML files in dist, found ${htmlFiles.length}`)
+const expectedHtmlFiles = prerenderPaths.length + auxiliaryResults.size + 1
+assert(htmlFiles.length === expectedHtmlFiles, `Expected ${expectedHtmlFiles} HTML files in dist, found ${htmlFiles.length}`)
 
-console.log(`[prerender] Validated ${manifest.indexablePaths.length} sitemap routes, ${manifest.legalPaths.length} legal routes and ${manifest.noindexPaths.length} non-prerendered noindex routes.`)
+console.log(`[prerender] Validated ${manifest.indexablePaths.length} sitemap routes, ${manifest.legalPaths.length} legal routes, ${manifest.noindexPaths.length} noindex routes, ${auxiliaryResults.size} auxiliary route and 404.html.`)
