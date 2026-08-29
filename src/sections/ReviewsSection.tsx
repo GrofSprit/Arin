@@ -1,5 +1,5 @@
 import { ExternalLink, Star } from 'lucide-react'
-import { GOOGLE_REVIEWS_URL } from '../lib/externalLinks'
+import { GOOGLE_REVIEWS_URL, GOOGLE_WRITE_REVIEW_URL } from '../lib/externalLinks'
 
 export default function ReviewsSection() {
   return (
@@ -7,7 +7,7 @@ export default function ReviewsSection() {
         <div className="max-w-[1200px] mx-auto px-5 md:px-10 lg:px-12">
           <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
             <div className="entrance bg-midnight p-7 md:p-10 text-white shadow-card">
-              <p className="text-xs font-semibold uppercase tracking-wider text-electric mb-4">Google-Bewertung</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-electric mb-4">Google-Bewertung für B&amp;C Fahrzeugteile</p>
               <div className="flex items-end gap-3 mb-3">
                 <strong className="text-5xl md:text-6xl font-semibold leading-none">4,9/5</strong>
               </div>
@@ -16,7 +16,7 @@ export default function ReviewsSection() {
                   <Star key={star} size={22} className="fill-electric text-electric" aria-hidden="true" />
                 ))}
               </div>
-              <p className="mt-5 text-sm text-white/60">Basierend auf 38 Google Bewertungen</p>
+              <p className="mt-5 text-sm text-white/60">Basierend auf 38 Google Bewertungen für B&amp;C Fahrzeugteile</p>
               <a
                 href={GOOGLE_REVIEWS_URL}
                 target="_blank"
@@ -34,8 +34,21 @@ export default function ReviewsSection() {
                 Kundenbewertungen
               </h2>
               <p className="entrance text-base md:text-lg text-midnight/60 leading-relaxed mb-7" style={{ transitionDelay: '0.1s' }}>
-                Über den hinterlegten Google-Eintrag können Sie die öffentlich sichtbaren Bewertungen und einzelnen Erfahrungen direkt bei Google nachlesen.
+                B&amp;C Fahrzeugteile ist der physische Fahrzeugteilehandel hinter TeilePilot24. Die angezeigte Bewertung von 4,9/5 bei 38 Google Bewertungen gehört zum Google-Profil von B&amp;C Fahrzeugteile.
               </p>
+              <p className="entrance text-sm md:text-base text-midnight/60 leading-relaxed mb-5" style={{ transitionDelay: '0.15s' }}>
+                Wenn Sie TeilePilot24 genutzt haben, können Sie Ihre Erfahrung direkt bei Google teilen.
+              </p>
+              <a
+                href={GOOGLE_WRITE_REVIEW_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="entrance inline-flex w-full items-center justify-center gap-2 bg-electric px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-electric-dark sm:w-auto"
+                style={{ transitionDelay: '0.2s' }}
+              >
+                TeilePilot24 bewerten
+                <ExternalLink size={15} aria-hidden="true" />
+              </a>
             </div>
           </div>
         </div>
