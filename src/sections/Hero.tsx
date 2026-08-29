@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { CheckCircle2, MessageCircle } from 'lucide-react'
+import { CheckCircle2, MessageCircle, ShieldCheck } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { WHATSAPP_URL } from '../lib/whatsapp'
 
 const trustBadges = [
@@ -75,6 +76,14 @@ export default function Hero() {
               >
                 So funktioniert’s
               </button>
+            </div>
+
+            <div className="hero-entrance animate-hero-trust mb-5 flex max-w-lg items-start gap-2.5 text-xs leading-relaxed text-white/45">
+              <ShieldCheck size={15} className="mt-0.5 flex-shrink-0 text-electric" aria-hidden="true" />
+              <p>
+                Für die Teileprüfung sind vor allem die technischen Fahrzeugdaten relevant. Hinweise zur Verarbeitung Ihrer Angaben finden Sie im{' '}
+                <Link to="/datenschutz" className="text-white/70 underline underline-offset-2 hover:text-white">Datenschutz</Link>.
+              </p>
             </div>
 
             {/* Trust badges */}

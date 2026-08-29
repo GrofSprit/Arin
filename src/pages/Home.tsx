@@ -7,6 +7,8 @@ import PartsCategory from '../sections/PartsCategory'
 import PopularBrandsSection from '../sections/PopularBrandsSection'
 import PartsSearchHelpSection from '../sections/PartsSearchHelpSection'
 import HowItWorks from '../sections/HowItWorks'
+import CompanySection from '../sections/CompanySection'
+import PurchaseDeliverySection from '../sections/PurchaseDeliverySection'
 import FAQSection from '../sections/FAQSection'
 import FinalCTA from '../sections/FinalCTA'
 import Footer from '../sections/Footer'
@@ -25,12 +27,14 @@ export default function Home() {
       <TrustBar />
       <main>
         <Hero />
-        <TrustSection />
-        <ReviewsSection />
         <PartsCategory />
         <PopularBrandsSection />
-        <PartsSearchHelpSection />
         <HowItWorks />
+        <PartsSearchHelpSection />
+        <TrustSection />
+        <CompanySection />
+        <PurchaseDeliverySection />
+        <ReviewsSection />
         <FAQSection />
         <FinalCTA />
       </main>

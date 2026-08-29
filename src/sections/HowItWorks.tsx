@@ -1,42 +1,42 @@
-import { MessageCircle, Camera, Search, FileCheck } from 'lucide-react'
+import { FileCheck, FileText, MessageCircle, Search } from 'lucide-react'
 
 const steps = [
   {
     number: '1',
     icon: MessageCircle,
-    title: 'Fahrzeugschein oder VIN senden',
-    description: 'Senden Sie die Fahrzeugdaten einfach per WhatsApp.',
+    title: 'Ersatzteil nennen',
+    description: 'Beschreiben Sie kurz, welches Ersatzteil Sie benötigen, und ergänzen Sie bei Bedarf ein Foto.',
   },
   {
     number: '2',
-    icon: Camera,
-    title: 'Ersatzteil beschreiben',
-    description: 'Nennen Sie das gesuchte Teil und ergänzen Sie bei Bedarf ein Foto.',
+    icon: FileText,
+    title: 'Fahrzeugschein oder VIN senden',
+    description: 'Senden Sie die Fahrzeugdaten bequem per WhatsApp, damit das Fahrzeug genauer eingegrenzt werden kann.',
   },
   {
     number: '3',
     icon: Search,
-    title: 'Persönliche VIN-/OEM-Prüfung',
-    description: 'Unser Team gleicht VIN, Fahrzeugdaten und OEM-Nummern manuell ab.',
+    title: 'Persönliche Prüfung',
+    description: 'Wir prüfen die Fahrzeugdaten und berücksichtigen bei Bedarf OEM-Referenzen, PR-Codes oder weitere technische Angaben.',
   },
   {
     number: '4',
     icon: FileCheck,
-    title: 'Passendes Angebot erhalten',
-    description: 'Sie erhalten ein persönlich geprüftes Ersatzteil-Angebot.',
+    title: 'Unverbindliches Angebot erhalten',
+    description: 'Sie erhalten ein persönliches Ersatzteil-Angebot und entscheiden anschließend selbst, ob Sie bestellen möchten.',
   },
 ]
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="bg-silver/40 py-16 md:py-24 lg:py-32">
+    <section id="how-it-works" className="scroll-mt-32 bg-white py-16 md:scroll-mt-36 md:py-24 lg:py-32">
       <div className="max-w-[1200px] mx-auto px-5 md:px-10 lg:px-12">
         <div className="text-center mb-10 md:mb-14">
           <h2 className="entrance-headline text-2xl md:text-3xl lg:text-[38px] text-midnight font-semibold mb-3 tracking-tight">
             So einfach funktioniert's
           </h2>
           <p className="entrance text-base text-midnight/55 max-w-md mx-auto" style={{ transitionDelay: '0.1s' }}>
-            Vier einfache Schritte – kein Katalog, kein Stress.
+            Von der Teileanfrage bis zum persönlichen Angebot – transparent in vier Schritten.
           </p>
         </div>
 
@@ -44,7 +44,7 @@ export default function HowItWorks() {
           {steps.map((step, i) => (
             <div
               key={step.number}
-              className="entrance bg-white p-6 md:p-7 text-center group shadow-sm"
+              className="entrance group border border-silver/70 bg-silver/25 p-6 text-center shadow-sm md:p-7"
               style={{ transitionDelay: `${i * 0.08}s` }}
             >
               <div className="w-10 h-10 rounded-full bg-electric text-white flex items-center justify-center text-sm font-bold mx-auto mb-4 transition-colors group-hover:bg-electric-dark">
@@ -59,15 +59,6 @@ export default function HowItWorks() {
           ))}
         </div>
 
-        {/* Mechanic image */}
-        <div className="entrance mt-8 md:mt-10 rounded overflow-hidden shadow-md" style={{ transitionDelay: '0.4s' }}>
-          <img
-            src="/images/mechanic.jpg"
-            alt="Mechaniker prüft Ersatzteil in der Werkstatt"
-            className="w-full h-48 md:h-64 lg:h-72 object-cover object-center"
-            loading="lazy"
-          />
-        </div>
       </div>
     </section>
   )

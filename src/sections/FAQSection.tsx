@@ -1,34 +1,31 @@
 import { useState, useCallback, useId } from 'react'
 import { ChevronDown } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const faqs = [
   {
-    question: 'Ist die Anfrage kostenlos?',
+    question: 'Ist die Anfrage kostenlos und unverbindlich?',
     answer: 'Ja, die Anfrage ist völlig kostenlos und unverbindlich. Sie erhalten ein persönliches Angebot und können frei entscheiden, ob Sie bestellen möchten.',
   },
   {
-    question: 'Muss ich sofort kaufen?',
-    answer: 'Nein. Das Angebot ist komplett unverbindlich. Sie entscheiden, ob und wann Sie bestellen möchten. Es entstehen Ihnen keine Kosten durch die Anfrage.',
+    question: 'Welche Fahrzeugdaten werden benötigt?',
+    answer: 'Hilfreich sind ein Foto des Fahrzeugscheins oder die VIN sowie die Bezeichnung des gesuchten Teils. Je nach Fahrzeug und Ersatzteil können zusätzlich eine OEM-Nummer, ein PR-Code oder weitere technische Angaben benötigt werden.',
   },
   {
-    question: 'Kann ich den Fahrzeugschein per WhatsApp senden?',
-    answer: 'Ja, das ist die einfachste Methode. Schreiben Sie uns per WhatsApp, welches Teil Sie benötigen, und senden Sie uns ein Foto Ihres Fahrzeugscheins. Wir prüfen alles Weitere für Sie.',
-  },
-  {
-    question: 'Wie schnell bekomme ich ein Angebot?',
+    question: 'Wie lange dauert die Prüfung und Angebotserstellung?',
     answer: 'In der Regel erhalten Sie Ihr persönliches Angebot innerhalb von 24 Stunden (werktags). Bei komplexen Anfragen kann es bis zu 48 Stunden dauern.',
   },
   {
-    question: 'Prüfen Sie die Teile automatisch mit KI?',
-    answer: 'Nein. Unser Team prüft die Teileauswahl manuell, liest die VIN aus und gleicht die OEM-Kompatibilität mit den verfügbaren Fahrzeugdaten ab. So reduzieren wir das Risiko einer Fehlzuordnung; eine automatische KI-Zuordnung findet nicht statt.',
+    question: 'Muss ich nach dem Angebot bestellen?',
+    answer: 'Nein. Das Angebot ist unverbindlich. Sie entscheiden selbst, ob Sie bestellen möchten.',
   },
   {
-    question: 'Wie läuft der Versand ab?',
-    answer: 'Wir versenden Bestellungen ausschließlich mit Sendungsverfolgung. Die Versandkosten werden vor der Bestellung transparent im Angebot angezeigt.',
+    question: 'Versenden Sie deutschlandweit?',
+    answer: 'Ja, TeilePilot24 bietet deutschlandweiten Versand an.',
   },
   {
-    question: 'Was passiert, wenn ein Paket nicht ankommt?',
-    answer: 'Jede Sendung erhält eine Trackingnummer. Sollte es ein Problem mit der Zustellung geben, prüfen wir den Versandstatus gemeinsam mit dem Versanddienstleister.',
+    question: 'Kann ich Teile in Mönchengladbach abholen?',
+    answer: 'Ja, eine Abholung bei B&C Fahrzeugteile in Mönchengladbach ist möglich.',
   },
 ]
 
@@ -75,7 +72,7 @@ export default function FAQSection() {
   }, [])
 
   return (
-    <section id="faq" className="bg-silver/40 py-20 md:py-28 lg:py-36">
+    <section id="faq" className="bg-white py-16 md:py-24 lg:py-32">
       <div className="max-w-[800px] mx-auto px-5 md:px-10 lg:px-12">
         <div className="text-center mb-10 md:mb-14">
           <h2 className="entrance-headline text-3xl md:text-4xl lg:text-[42px] text-midnight font-semibold mb-4">
@@ -86,7 +83,7 @@ export default function FAQSection() {
           </p>
         </div>
 
-        <div className="bg-white shadow-sm border border-silver/50 px-5 md:px-8">
+        <div className="bg-silver/20 shadow-sm border border-silver/50 px-5 md:px-8">
           {faqs.map((faq, i) => (
             <div key={i} className="entrance" style={{ transitionDelay: `${(i + 2) * 0.08}s` }}>
               <FAQItem
@@ -97,6 +94,11 @@ export default function FAQSection() {
               />
             </div>
           ))}
+        </div>
+        <div className="entrance mt-7 text-center">
+          <Link to="/faq" className="inline-flex items-center justify-center text-sm font-semibold text-electric hover:text-electric-dark">
+            Alle häufigen Fragen
+          </Link>
         </div>
       </div>
     </section>
