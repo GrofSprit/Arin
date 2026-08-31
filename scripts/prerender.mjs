@@ -8,6 +8,7 @@ const serverEntry = path.join(projectRoot, 'dist-ssr', 'entry-server.js')
 const sitemapFile = path.join(distDir, 'sitemap.xml')
 const validateOnly = process.argv.includes('--validate-only')
 const siteOrigin = 'https://www.teilepilot24.de'
+const staticNoindexAuxiliaryFiles = [path.join(distDir, 'paket', 'index.html')]
 
 // Vite externalizes React for the SSR bundle. Keep the build-time renderer on
 // the same production React branch as the browser bundle to avoid markup drift.
@@ -290,8 +291,19 @@ const notFoundFile = path.join(distDir, '404.html')
 assert(existsSync(notFoundFile), '/404.html: prerendered HTML file is missing')
 validateNotFoundDocument(readFileSync(notFoundFile, 'utf8'), notFoundResult)
 
+for (const staticFile of staticNoindexAuxiliaryFiles) {
+  assert(existsSync(staticFile), `${path.relative(distDir, staticFile)}: static auxiliary HTML file is missing`)
+  const html = readFileSync(staticFile, 'utf8')
+  const relativePath = path.relative(distDir, staticFile)
+  assert(
+    getSingleMeta(html, 'name', 'robots', `/${relativePath}`) === 'noindex, nofollow',
+    `${relativePath}: static auxiliary page must remain noindex, nofollow`,
+  )
+  assert(getCanonicalTags(html).length === 0, `${relativePath}: static auxiliary page must not have a canonical`)
+}
+
 const htmlFiles = collectHtmlFiles(distDir)
-const expectedHtmlFiles = prerenderPaths.length + auxiliaryResults.size + 1
+const expectedHtmlFiles = prerenderPaths.length + auxiliaryResults.size + staticNoindexAuxiliaryFiles.length + 1
 assert(htmlFiles.length === expectedHtmlFiles, `Expected ${expectedHtmlFiles} HTML files in dist, found ${htmlFiles.length}`)
 
-console.log(`[prerender] Validated ${manifest.indexablePaths.length} sitemap routes, ${manifest.legalPaths.length} legal routes, ${manifest.noindexPaths.length} noindex routes, ${auxiliaryResults.size} auxiliary route and 404.html.`)
+console.log(`[prerender] Validated ${manifest.indexablePaths.length} sitemap routes, ${manifest.legalPaths.length} legal routes, ${manifest.noindexPaths.length} noindex routes, ${auxiliaryResults.size} auxiliary route, ${staticNoindexAuxiliaryFiles.length} static noindex auxiliary page and 404.html.`)

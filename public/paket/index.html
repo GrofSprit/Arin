@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#142443">
+<title>Paket erhalten | TeilePilot24</title>
+<style>
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #F7F8FA;
+  color: #14213A;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes circleEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ringPulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes checkDraw {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes particleFly {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.5);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(var(--tx), var(--ty)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--tx) * 1.4), calc(var(--ty) * 1.4)) scale(0.3);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   CARD
+   ============================================ */
+.card {
+  width: 100%;
+  max-width: 520px;
+  background: #FFFFFF;
+  border: 1px solid #E7EAF0;
+  border-radius: 26px;
+  box-shadow: 0 18px 55px rgba(20,36,67,0.08);
+  position: relative;
+  overflow: hidden;
+  animation: cardEnter 650ms cubic-bezier(.2,.75,.2,1) forwards;
+  padding: 28px 24px;
+}
+
+.card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4968F2, #20D86B);
+}
+
+/* ============================================
+   LOGO
+   ============================================ */
+.logo {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  user-select: none;
+}
+
+.logo-teile { color: #142443; }
+.logo-pilot { color: #4968F2; }
+.logo-24    { color: #142443; }
+
+/* ============================================
+   SUCCESS ICON
+   ============================================ */
+.success-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.success-circle {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #EAFBF1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: circleEnter 580ms cubic-bezier(.2,.75,.2,1) 150ms forwards;
+  opacity: 0;
+  transform: scale(0.7);
+}
+
+.success-ring {
+  position: absolute;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 2px solid #20D86B;
+  animation: ringPulse 1200ms ease-out 400ms forwards;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.success-ring-2 {
+  position: absolute;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 1.5px solid #4968F2;
+  animation: ringPulse 1400ms ease-out 700ms forwards;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.check-svg {
+  width: 40px;
+  height: 40px;
+}
+
+.check-path {
+  fill: none;
+  stroke: #20D86B;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: checkDraw 420ms ease-out 500ms forwards;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+.label {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9AA3B5;
+  margin-bottom: 10px;
+  animation: fadeInUp 400ms ease-out 200ms forwards;
+  opacity: 0;
+}
+
+h1 {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.15;
+  color: #14213A;
+  margin-bottom: 10px;
+  animation: fadeInUp 400ms ease-out 280ms forwards;
+  opacity: 0;
+}
+
+.order-badge {
+  display: none;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4968F2;
+  background: #EEF1FF;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin: 0 auto 14px auto;
+  width: fit-content;
+  border: 1px solid #E7EAF0;
+  animation: fadeInUp 400ms ease-out 340ms forwards;
+  opacity: 0;
+  max-width: 100%;
+  word-break: break-all;
+}
+
+.order-badge.visible {
+  display: block;
+}
+
+.description {
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #7F899D;
+  margin-bottom: 18px;
+  animation: fadeInUp 400ms ease-out 400ms forwards;
+  opacity: 0;
+}
+
+/* ============================================
+   BADGES
+   ============================================ */
+.badges {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  animation: fadeInUp 400ms ease-out 460ms forwards;
+  opacity: 0;
+}
+
+.badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1A2D50;
+  background: #F7F8FA;
+  border: 1px solid #E7EAF0;
+  padding: 5px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 58px;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.btn:focus-visible {
+  outline: 3px solid #4968F2;
+  outline-offset: 2px;
+}
+
+.btn:active {
+  transform: scale(0.995) translateY(1px);
+}
+
+/* Primary CTA */
+.btn-primary {
+  background: #20D86B;
+  color: #142443;
+  box-shadow: 0 4px 14px rgba(32,216,107,0.18);
+  margin-bottom: 10px;
+}
+
+.btn-primary:hover {
+  background: #26E675;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 25px rgba(32,216,107,0.20);
+}
+
+.btn-primary .arrow {
+  display: inline-block;
+  margin-left: 6px;
+  transition: transform 180ms ease;
+}
+
+.btn-primary:hover .arrow {
+  transform: translateX(3px);
+}
+
+/* Secondary CTA */
+.btn-secondary {
+  background: #FFFFFF;
+  color: #142443;
+  border: 1.5px solid #E7EAF0;
+  font-weight: 700;
+  min-height: 52px;
+  border-radius: 14px;
+}
+
+.btn-secondary:hover {
+  background: #F7F8FA;
+  border-color: #D0D5DE;
+}
+
+/* Tertiary CTA */
+.btn-tertiary {
+  background: transparent;
+  color: #4968F2;
+  font-weight: 700;
+  font-size: 15px;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(73,104,242,0.3);
+}
+
+.btn-tertiary:hover {
+  text-decoration-color: #4968F2;
+}
+
+/* ============================================
+   PARTICLES
+   ============================================ */
+.particle-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.particle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   DIVIDERS & SECTIONS
+   ============================================ */
+.divider {
+  text-align: center;
+  margin: 14px 0 10px 0;
+  position: relative;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #E7EAF0;
+}
+
+.divider-text {
+  position: relative;
+  display: inline-block;
+  background: #FFFFFF;
+  padding: 0 12px;
+  font-size: 12px;
+  color: #9AA3B5;
+  font-weight: 600;
+}
+
+.secondary-section {
+  text-align: center;
+  margin-top: 6px;
+}
+
+.secondary-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #14213A;
+  margin-bottom: 8px;
+}
+
+.tertiary-section {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #E7EAF0;
+  text-align: center;
+  animation: fadeInUp 400ms ease-out 520ms forwards;
+  opacity: 0;
+}
+
+.tertiary-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #14213A;
+  margin-bottom: 4px;
+}
+
+.tertiary-desc {
+  font-size: 13px;
+  color: #7F899D;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.disclosure {
+  text-align: center;
+  font-size: 12px;
+  color: #9AA3B5;
+  margin-top: 8px;
+  line-height: 1.45;
+  animation: fadeInUp 400ms ease-out 480ms forwards;
+  opacity: 0;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: #9AA3B5;
+  line-height: 1.6;
+  animation: fadeInUp 400ms ease-out 600ms forwards;
+  opacity: 0;
+  max-width: 520px;
+  width: 100%;
+}
+
+.footer strong {
+  color: #7F899D;
+  font-weight: 600;
+}
+
+.footer-links {
+  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+
+.footer-links a {
+  color: #7F899D;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 150ms ease;
+}
+
+.footer-links a:hover {
+  color: #4968F2;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-links a:focus-visible {
+  outline: 2px solid #4968F2;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   PREFERS REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .success-circle,
+  .order-badge,
+  .label,
+  h1,
+  .description,
+  .badges,
+  .disclosure,
+  .tertiary-section,
+  .footer {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .check-path {
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+/* ============================================
+   DESKTOP
+   ============================================ */
+@media (min-width: 640px) {
+  body {
+    padding: 24px;
+  }
+  .card {
+    padding: 34px 32px;
+    border-radius: 28px;
+  }
+  .logo {
+    font-size: 23px;
+  }
+  h1 {
+    font-size: 38px;
+  }
+  .description {
+    font-size: 16px;
+  }
+}
+
+/* ============================================
+   VERY SMALL SCREENS
+   ============================================ */
+@media (max-width: 360px) {
+  body {
+    padding: 12px;
+  }
+  .card {
+    padding: 22px 18px;
+    border-radius: 22px;
+  }
+  h1 {
+    font-size: 28px;
+  }
+  .btn {
+    font-size: 15px;
+    min-height: 54px;
+  }
+  .success-circle {
+    width: 80px;
+    height: 80px;
+  }
+  .success-ring,
+  .success-ring-2 {
+    width: 80px;
+    height: 80px;
+  }
+  .check-svg {
+    width: 36px;
+    height: 36px;
+  }
+}
+</style>
+</head>
+<body>
+
+  <main class="card" role="main" aria-labelledby="main-heading">
+    <div class="card-accent" aria-hidden="true"></div>
+
+    <!-- Logo -->
+    <div class="logo" aria-label="TeilePilot24">
+      <span class="logo-teile">Teile</span><span class="logo-pilot">Pilot</span><span class="logo-24">24</span>
+    </div>
+
+    <!-- Success Icon -->
+    <div class="success-wrap" aria-hidden="true">
+      <div class="success-ring"></div>
+      <div class="success-ring-2"></div>
+      <div class="success-circle">
+        <svg class="check-svg" viewBox="0 0 24 24" aria-hidden="true">
+          <path class="check-path" d="M6 12l4 4 8-8"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Label -->
+    <p class="label">Vielen Dank für Ihre Bestellung</p>
+
+    <!-- Heading -->
+    <h1 id="main-heading">Paket angekommen?</h1>
+
+    <!-- Order Badge (dynamic) -->
+    <div class="order-badge" id="order-badge" aria-live="polite"></div>
+
+    <!-- Description -->
+    <p class="description">
+      Wir hoffen, dass alles gut bei Ihnen angekommen ist.<br>
+      Wenn Sie mit unserem Service zufrieden sind,<br>
+      freuen wir uns sehr über Ihre Bewertung bei Google.
+    </p>
+
+    <!-- Service Badges -->
+    <div class="badges">
+      <span class="badge">Persönlicher Service</span>
+      <span class="badge">VIN &amp; OEM-Prüfung</span>
+    </div>
+
+    <!-- Primary CTA: Google Review -->
+    <button type="button" class="btn btn-primary" id="btn-google" aria-live="polite">
+      <span id="btn-google-text">Jetzt bei Google bewerten<span class="arrow" aria-hidden="true">→</span></span>
+      <span class="particle-container" id="particles" aria-hidden="true"></span>
+    </button>
+
+    <p class="disclosure">
+      Mit dem Klick öffnen Sie direkt die<br>
+      Google-Bewertungsseite von TeilePilot24.
+    </p>
+
+    <!-- Divider -->
+    <div class="divider" aria-hidden="true">
+      <span class="divider-text">oder</span>
+    </div>
+
+    <!-- Secondary CTA: WhatsApp Delivery Question -->
+    <div class="secondary-section">
+      <p class="secondary-label">Frage zur Lieferung?</p>
+      <button type="button" class="btn btn-secondary" id="btn-whatsapp-delivery">
+        Per WhatsApp kontaktieren
+      </button>
+    </div>
+
+    <!-- Tertiary CTA: New Part Inquiry -->
+    <div class="tertiary-section">
+      <p class="tertiary-title">Noch ein Ersatzteil benötigt?</p>
+      <p class="tertiary-desc">Wir helfen Ihnen auch bei Ihrer nächsten Teileanfrage.</p>
+      <button type="button" class="btn btn-tertiary" id="btn-whatsapp-part">
+        Neue Teileanfrage starten
+      </button>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <p><strong>TeilePilot24</strong> · Ein Service von B&amp;C Fahrzeugteile</p>
+    <nav class="footer-links" aria-label="Footer Navigation">
+      <a href="https://www.teilepilot24.de/">Zur Website</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://www.teilepilot24.de/datenschutz">Datenschutz</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://www.teilepilot24.de/widerrufsbelehrung">Widerruf</a>
+    </nav>
+  </footer>
+
+  <!-- Status region for screen readers -->
+  <div id="sr-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+(function() {
+  "use strict";
+
+  // ==========================================
+  // CONFIGURATION
+  // ==========================================
+  var GOOGLE_REVIEW_URL = "https://g.page/r/CSxl4XfiZFdLEAE/review";
+  var WHATSAPP_NUMBER   = "491773773486";
+  var MAX_ORDER_LENGTH  = 40;
+  var ALLOWED_ORDER_CHARS = /^[A-Za-z0-9\-_\/]+$/;
+
+  // ==========================================
+  // ORDER PARAM HANDLING
+  // ==========================================
+  function getOrderNumber() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var raw = params.get("order");
+      if (!raw) return null;
+      var trimmed = raw.trim();
+      if (trimmed.length === 0) return null;
+      if (trimmed.length > MAX_ORDER_LENGTH) {
+        trimmed = trimmed.substring(0, MAX_ORDER_LENGTH);
+      }
+      if (!ALLOWED_ORDER_CHARS.test(trimmed)) {
+        // Remove disallowed characters
+        var sanitized = "";
+        for (var i = 0; i < trimmed.length; i++) {
+          var ch = trimmed.charAt(i);
+          if (ALLOWED_ORDER_CHARS.test(ch)) {
+            sanitized += ch;
+          }
+        }
+        trimmed = sanitized;
+      }
+      if (trimmed.length === 0) return null;
+      return trimmed;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  var orderNumber = getOrderNumber();
+
+  // Display order badge safely using textContent
+  var badgeEl = document.getElementById("order-badge");
+  if (badgeEl && orderNumber) {
+    badgeEl.textContent = "Bestellung " + orderNumber;
+    badgeEl.classList.add("visible");
+  }
+
+  // ==========================================
+  // WHATSAPP MESSAGE BUILDERS
+  // ==========================================
+  function buildDeliveryMessage() {
+    if (orderNumber) {
+      return "Hallo TeilePilot24,\n\n" +
+             "ich habe eine Frage zu meiner Lieferung.\n\n" +
+             "Bestellnummer: " + orderNumber + "\n\n" +
+             "Vielen Dank.";
+    }
+    return "Hallo TeilePilot24,\n\n" +
+           "ich habe eine Frage zu meiner Lieferung.\n\n" +
+           "Vielen Dank.";
+  }
+
+  function buildPartMessage() {
+    if (orderNumber) {
+      return "Hallo TeilePilot24,\n\n" +
+             "ich benötige ein weiteres Ersatzteil.\n\n" +
+             "Bitte kontaktieren Sie mich.\n\n" +
+             "Letzte Bestellung: " + orderNumber;
+    }
+    return "Hallo TeilePilot24,\n\n" +
+           "ich benötige ein weiteres Ersatzteil.\n\n" +
+           "Bitte kontaktieren Sie mich.";
+  }
+
+  function openWhatsApp(message) {
+    var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
+    window.location.href = url;
+  }
+
+  // ==========================================
+  // PARTICLE ANIMATION
+  // ==========================================
+  function spawnParticles(container) {
+    if (!container) return;
+    var colors = ["#4968F2", "#20D86B"];
+    var count = 7;
+    for (var i = 0; i < count; i++) {
+      var p = document.createElement("span");
+      p.className = "particle";
+      p.style.backgroundColor = colors[i % colors.length];
+      var angle = (Math.PI * 2 * i) / count + (Math.random() * 0.4 - 0.2);
+      var distance = 70 + Math.random() * 40;
+      var tx = Math.cos(angle) * distance + "px";
+      var ty = Math.sin(angle) * distance + "px";
+      p.style.setProperty("--tx", tx);
+      p.style.setProperty("--ty", ty);
+      p.style.animation = "particleFly " + (600 + Math.random() * 200) + "ms ease-out forwards";
+      container.appendChild(p);
+      // Clean up after animation
+      (function(el) {
+        setTimeout(function() {
+          if (el.parentNode) el.parentNode.removeChild(el);
+        }, 900);
+      })(p);
+    }
+  }
+
+  // ==========================================
+  // GOOGLE CTA HANDLER
+  // ==========================================
+  var btnGoogle = document.getElementById("btn-google");
+  var btnGoogleText = document.getElementById("btn-google-text");
+  var particlesContainer = document.getElementById("particles");
+  var srStatus = document.getElementById("sr-status");
+  var googleClicked = false;
+
+  if (btnGoogle) {
+    btnGoogle.addEventListener("click", function() {
+      if (googleClicked) return;
+      googleClicked = true;
+      btnGoogle.disabled = true;
+      btnGoogle.setAttribute("aria-disabled", "true");
+
+      // Update button text safely
+      if (btnGoogleText) {
+        btnGoogleText.textContent = "Danke! Google wird geöffnet …";
+      }
+
+      // Announce to screen readers
+      if (srStatus) {
+        srStatus.textContent = "Danke! Google wird geöffnet. Sie werden weitergeleitet.";
+      }
+
+      // Spawn particles
+      spawnParticles(particlesContainer);
+
+      // Navigate after short delay
+      setTimeout(function() {
+        window.location.href = GOOGLE_REVIEW_URL;
+      }, 580);
+    });
+  }
+
+  // ==========================================
+  // WHATSAPP CTA HANDLERS
+  // ==========================================
+  var btnWhatsAppDelivery = document.getElementById("btn-whatsapp-delivery");
+  if (btnWhatsAppDelivery) {
+    btnWhatsAppDelivery.addEventListener("click", function() {
+      openWhatsApp(buildDeliveryMessage());
+    });
+  }
+
+  var btnWhatsAppPart = document.getElementById("btn-whatsapp-part");
+  if (btnWhatsAppPart) {
+    btnWhatsAppPart.addEventListener("click", function() {
+      openWhatsApp(buildPartMessage());
+    });
+  }
+
+})();
+</script>
+</body>
+</html>
