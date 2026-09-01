@@ -9,6 +9,7 @@ const sitemapFile = path.join(distDir, 'sitemap.xml')
 const validateOnly = process.argv.includes('--validate-only')
 const siteOrigin = 'https://www.teilepilot24.de'
 const staticNoindexAuxiliaryFiles = [path.join(distDir, 'paket', 'index.html')]
+const staticVerificationFiles = [path.join(distDir, 'bcbf3c29-4261-4f17-b0a6-0305d9f00e35.html')]
 
 // Vite externalizes React for the SSR bundle. Keep the build-time renderer on
 // the same production React branch as the browser bundle to avoid markup drift.
@@ -302,8 +303,16 @@ for (const staticFile of staticNoindexAuxiliaryFiles) {
   assert(getCanonicalTags(html).length === 0, `${relativePath}: static auxiliary page must not have a canonical`)
 }
 
+for (const staticFile of staticVerificationFiles) {
+  assert(existsSync(staticFile), `${path.relative(distDir, staticFile)}: static verification HTML file is missing`)
+  assert(
+    readFileSync(staticFile, 'utf8') === path.basename(staticFile, '.html'),
+    `${path.relative(distDir, staticFile)}: static verification HTML content changed`,
+  )
+}
+
 const htmlFiles = collectHtmlFiles(distDir)
-const expectedHtmlFiles = prerenderPaths.length + auxiliaryResults.size + staticNoindexAuxiliaryFiles.length + 1
+const expectedHtmlFiles = prerenderPaths.length + auxiliaryResults.size + staticNoindexAuxiliaryFiles.length + staticVerificationFiles.length + 1
 assert(htmlFiles.length === expectedHtmlFiles, `Expected ${expectedHtmlFiles} HTML files in dist, found ${htmlFiles.length}`)
 
-console.log(`[prerender] Validated ${manifest.indexablePaths.length} sitemap routes, ${manifest.legalPaths.length} legal routes, ${manifest.noindexPaths.length} noindex routes, ${auxiliaryResults.size} auxiliary route, ${staticNoindexAuxiliaryFiles.length} static noindex auxiliary page and 404.html.`)
+console.log(`[prerender] Validated ${manifest.indexablePaths.length} sitemap routes, ${manifest.legalPaths.length} legal routes, ${manifest.noindexPaths.length} noindex routes, ${auxiliaryResults.size} auxiliary route, ${staticNoindexAuxiliaryFiles.length} static noindex auxiliary page, ${staticVerificationFiles.length} static verification file and 404.html.`)
