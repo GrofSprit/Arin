@@ -86,14 +86,62 @@
       }
     </script>
 
-    <!-- Google Ads Tag -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18263063621"></script>
+    <!-- Google Tag: loaded only after the existing cookie consent is accepted -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      (function () {
+        var GOOGLE_TAG_ID = 'G-ZLWNQ1P904';
+        var GOOGLE_ADS_ID = 'AW-18263063621';
+        var CONSENT_STORAGE_KEY = 'teilepilot24-cookie-choice';
+        var googleTagLoaded = false;
 
-      gtag('config', 'AW-18263063621');
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
+
+        window.gtag('consent', 'default', {
+          analytics_storage: 'denied',
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied'
+        });
+
+        function loadGoogleTag() {
+          if (googleTagLoaded || document.querySelector('script[data-tp24-google-tag]')) return;
+          googleTagLoaded = true;
+
+          window.gtag('js', new Date());
+          window.gtag('config', GOOGLE_TAG_ID);
+          window.gtag('config', GOOGLE_ADS_ID);
+
+          var tag = document.createElement('script');
+          tag.async = true;
+          tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GOOGLE_TAG_ID);
+          tag.setAttribute('data-tp24-google-tag', '');
+          document.head.appendChild(tag);
+        }
+
+        window.tp24SetGoogleConsent = function (choice) {
+          var consentState = choice === 'accepted' ? 'granted' : 'denied';
+          window.gtag('consent', 'update', {
+            analytics_storage: consentState,
+            ad_storage: consentState,
+            ad_user_data: consentState,
+            ad_personalization: consentState
+          });
+
+          if (choice === 'accepted') loadGoogleTag();
+        };
+
+        try {
+          var storedChoice = window.localStorage.getItem(CONSENT_STORAGE_KEY);
+          if (storedChoice === 'accepted' || storedChoice === 'rejected') {
+            window.tp24SetGoogleConsent(storedChoice);
+          }
+        } catch {
+          // Keep the default denied state if storage is unavailable.
+        }
+      })();
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -1,16 +1,28 @@
 import { useEffect, useState } from 'react'
 
 const STORAGE_KEY = 'teilepilot24-cookie-choice'
+type CookieChoice = 'accepted' | 'rejected'
+
+declare global {
+  interface Window {
+    tp24SetGoogleConsent?: (choice: CookieChoice) => void
+  }
+}
 
 export default function CookieBanner() {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    setIsVisible(!localStorage.getItem(STORAGE_KEY))
+    const frame = window.requestAnimationFrame(() => {
+      setIsVisible(!localStorage.getItem(STORAGE_KEY))
+    })
+
+    return () => window.cancelAnimationFrame(frame)
   }, [])
 
-  const saveChoice = (choice: 'accepted' | 'rejected') => {
+  const saveChoice = (choice: CookieChoice) => {
     localStorage.setItem(STORAGE_KEY, choice)
+    window.tp24SetGoogleConsent?.(choice)
     setIsVisible(false)
   }
 
