@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { usePageMetadata } from '../hooks/usePageMetadata'
 import { NOT_FOUND_METADATA } from '../lib/routeSeo'
-import { WHATSAPP_URL } from '../lib/whatsapp'
+import { trackWhatsAppConversion, WHATSAPP_URL } from '../lib/whatsapp'
 import Footer from '../sections/Footer'
 import Navigation from '../sections/Navigation'
 import StickyWhatsApp from '../sections/StickyWhatsApp'
@@ -32,6 +32,7 @@ export default function NotFound() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={trackWhatsAppConversion}
               className="inline-flex items-center justify-center gap-2 border border-white/15 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:border-whatsapp/50 hover:text-whatsapp"
             >
               <MessageCircle size={18} aria-hidden="true" /> Per WhatsApp anfragen

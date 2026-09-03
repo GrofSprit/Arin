@@ -1,4 +1,4 @@
-import { WHATSAPP_URL } from '../lib/whatsapp'
+import { trackWhatsAppConversion, WHATSAPP_URL } from '../lib/whatsapp'
 
 export default function StickyWhatsApp() {
   return (
@@ -8,6 +8,7 @@ export default function StickyWhatsApp() {
         href={WHATSAPP_URL}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={trackWhatsAppConversion}
         className="fixed bottom-0 left-0 right-0 z-[200] bg-whatsapp text-white text-sm font-semibold pt-3.5 pb-[calc(0.875rem+env(safe-area-inset-bottom))] px-5 flex items-center justify-center gap-2.5 md:hidden transition-colors hover:bg-whatsapp-dark active:bg-whatsapp-dark shadow-[0_-4px_20px_rgba(0,0,0,0.15)]"
         aria-label="Ersatzteil jetzt per WhatsApp anfragen"
       >

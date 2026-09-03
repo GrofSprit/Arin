@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { CheckCircle2, MessageCircle, ShieldCheck } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { WHATSAPP_URL } from '../lib/whatsapp'
+import { trackWhatsAppConversion, WHATSAPP_URL } from '../lib/whatsapp'
 
 const trustBadges = [
   'Kostenlose Anfrage',
@@ -65,6 +65,7 @@ export default function Hero() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={trackWhatsAppConversion}
                 className="hero-entrance animate-hero-cta1 inline-flex items-center justify-center gap-2.5 bg-whatsapp text-white text-base md:text-lg font-semibold px-7 md:px-9 py-4 md:py-[1.125rem] shadow-xl shadow-whatsapp/25 transition-all duration-200 hover:bg-whatsapp-dark hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.97]"
               >
                 <MessageCircle size={21} />

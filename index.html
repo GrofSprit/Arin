@@ -91,6 +91,7 @@
       (function () {
         var GOOGLE_TAG_ID = 'G-ZLWNQ1P904';
         var GOOGLE_ADS_ID = 'AW-18263063621';
+        var GOOGLE_ADS_CONVERSION_ID = 'AW-10808738065';
         var CONSENT_STORAGE_KEY = 'teilepilot24-cookie-choice';
         var googleTagLoaded = false;
 
@@ -113,6 +114,7 @@
           window.gtag('js', new Date());
           window.gtag('config', GOOGLE_TAG_ID);
           window.gtag('config', GOOGLE_ADS_ID);
+          window.gtag('config', GOOGLE_ADS_CONVERSION_ID);
 
           var tag = document.createElement('script');
           tag.async = true;

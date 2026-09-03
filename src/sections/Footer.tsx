@@ -1,6 +1,6 @@
 import { Clock, MapPin, MessageCircle, PackageCheck, Star, Store } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { WHATSAPP_URL } from '../lib/whatsapp'
+import { trackWhatsAppConversion, WHATSAPP_URL } from '../lib/whatsapp'
 import { GOOGLE_REVIEWS_URL } from '../lib/externalLinks'
 
 export default function Footer() {
@@ -47,7 +47,7 @@ export default function Footer() {
             <h4 className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-4">Kontakt</h4>
             <ul className="space-y-3">
               <li><a href="mailto:aa@bc-fahrzeugteile.de" className="text-sm text-white/50 hover:text-white/80 transition-colors">aa@bc-fahrzeugteile.de</a></li>
-              <li><a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-whatsapp hover:text-whatsapp-dark transition-colors">+49 177 3773486</a></li>
+              <li><a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" onClick={trackWhatsAppConversion} className="text-sm text-whatsapp hover:text-whatsapp-dark transition-colors">+49 177 3773486</a></li>
               <li className="flex items-center gap-2 text-sm text-white/50"><Clock size={15} className="text-electric flex-shrink-0" /> Mo–Fr: 08:00–18:00</li>
               <li className="flex items-center gap-2 text-sm text-white/50"><MessageCircle size={15} className="text-electric flex-shrink-0" /> Antwort meist am selben Tag</li>
             </ul>
@@ -61,7 +61,7 @@ export default function Footer() {
             <Link to="/datenschutz" className="text-xs text-white/40 hover:text-white/80 transition-colors">Datenschutz</Link>
             <Link to="/widerrufsbelehrung" className="text-xs text-white/40 hover:text-white/80 transition-colors">Widerrufsbelehrung</Link>
             <Link to="/widerrufsformular" className="text-xs text-white/40 hover:text-white/80 transition-colors">Widerrufsformular</Link>
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-xs text-whatsapp/60 hover:text-whatsapp transition-colors">WhatsApp Anfrage</a>
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" onClick={trackWhatsAppConversion} className="text-xs text-whatsapp/60 hover:text-whatsapp transition-colors">WhatsApp Anfrage</a>
           </nav>
         </div>
       </div>

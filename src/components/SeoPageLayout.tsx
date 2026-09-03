@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle2, MessageCircle } from 'lucide-react'
 import Footer from '../sections/Footer'
 import Navigation from '../sections/Navigation'
 import StickyWhatsApp from '../sections/StickyWhatsApp'
-import { WHATSAPP_URL } from '../lib/whatsapp'
+import { trackWhatsAppConversion, WHATSAPP_URL } from '../lib/whatsapp'
 import { type SeoPageData } from '../data/seoPages'
 import { usePageMetadata } from '../hooks/usePageMetadata'
 import { getSeoPageJsonLd, getSeoPageMetadata } from '../lib/routeSeo'
@@ -60,6 +60,7 @@ export default function SeoPageLayout({ page, children }: SeoPageLayoutProps) {
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={trackWhatsAppConversion}
                   className="inline-flex items-center justify-center gap-2 bg-whatsapp px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-whatsapp-dark"
                 >
                   <MessageCircle size={18} aria-hidden="true" />
@@ -201,6 +202,7 @@ export default function SeoPageLayout({ page, children }: SeoPageLayoutProps) {
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={trackWhatsAppConversion}
                   className="mt-5 inline-flex w-full items-center justify-center gap-2 bg-whatsapp px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-whatsapp-dark"
                 >
                   <MessageCircle size={17} aria-hidden="true" />

@@ -1,7 +1,7 @@
 import { useId, useState, type ChangeEvent, type ClipboardEvent, type FormEvent, type KeyboardEvent } from 'react'
 import { AlertCircle, CheckCircle2, MessageCircle } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { createWhatsAppUrl } from '../lib/whatsapp'
+import { createWhatsAppUrl, trackWhatsAppConversion } from '../lib/whatsapp'
 
 const VIN_PATTERN = /^[A-HJ-NPR-Z0-9]{17}$/
 const EXCLUDED_VIN_CHARACTERS = /[IOQ]/
@@ -147,6 +147,7 @@ export default function VinWhatsAppCheck() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={trackWhatsAppConversion}
                   className="inline-flex min-h-11 flex-shrink-0 items-center justify-center gap-2 bg-whatsapp px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-whatsapp-dark focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-whatsapp/30"
                 >
                   <MessageCircle size={18} aria-hidden="true" />
