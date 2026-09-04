@@ -1,4 +1,5 @@
-import { FileCheck, FileText, MessageCircle, ScanSearch, Search, ShieldCheck, WalletCards } from 'lucide-react'
+import { FileCheck, FileText, MessageCircle, Search } from 'lucide-react'
+import PartsSearchHelpSection from './PartsSearchHelpSection'
 
 const steps = [
   {
@@ -27,18 +28,11 @@ const steps = [
   },
 ]
 
-const benefits = [
-  { icon: ShieldCheck, title: 'Persönliche Prüfung', detail: 'Individuell statt rein automatisch.' },
-  { icon: ScanSearch, title: 'VIN & OEM-Abgleich', detail: 'Bei Bedarf mit weiteren Fahrzeugdaten.' },
-  { icon: MessageCircle, title: 'Direkter Kontakt', detail: 'Rückfragen unkompliziert per WhatsApp.' },
-  { icon: WalletCards, title: 'Unverbindliche Anfrage', detail: 'Sie entscheiden nach dem Angebot.' },
-]
-
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="scroll-mt-32 bg-white py-14 md:scroll-mt-36 md:py-20 lg:py-24">
+    <section id="how-it-works" className="scroll-mt-32 bg-white py-12 md:scroll-mt-36 md:py-16 lg:py-20">
       <div className="max-w-[1200px] mx-auto px-5 md:px-10 lg:px-12">
-        <div className="text-center mb-8 md:mb-12">
+        <div className="text-center mb-7 md:mb-10">
           <h2 className="entrance-headline text-2xl md:text-3xl lg:text-[38px] text-midnight font-semibold mb-3 tracking-tight">
             So einfach funktioniert's
           </h2>
@@ -47,46 +41,30 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 md:gap-4">
+        <ol className="grid grid-cols-1 lg:grid-cols-4">
           {steps.map((step, i) => (
-            <div
+            <li
               key={step.number}
-              className="entrance group border border-silver/70 bg-silver/25 p-4 shadow-sm md:p-5"
+              className="entrance relative border-l border-electric/25 pb-6 pl-8 last:pb-0 lg:border-l-0 lg:border-t lg:pb-0 lg:pl-0 lg:pr-6 lg:pt-8 lg:last:pr-0"
               style={{ transitionDelay: `${i * 0.08}s` }}
             >
-              <div className="flex items-start gap-3 sm:block sm:text-center">
-                <div className="flex shrink-0 flex-col items-center gap-2 sm:flex-row sm:justify-center">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-electric text-xs font-bold text-white transition-colors group-hover:bg-electric-dark">
-                    {step.number}
-                  </div>
-                  <div className="flex h-9 w-9 items-center justify-center bg-electric/8">
-                    <step.icon size={20} className="text-electric" strokeWidth={1.5} />
-                  </div>
+              <span className="absolute -left-4 top-0 flex h-8 w-8 items-center justify-center rounded-full bg-electric text-xs font-bold text-white lg:-top-4 lg:left-0">
+                {step.number}
+              </span>
+              <div className="flex items-start gap-3 lg:block">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center bg-electric/8 text-electric lg:mb-3">
+                  <step.icon size={19} strokeWidth={1.5} aria-hidden="true" />
                 </div>
-                <div className="min-w-0 sm:mt-4">
-                  <h3 className="mb-1.5 text-sm font-semibold text-midnight md:text-base">{step.title}</h3>
+                <div className="min-w-0">
+                  <h3 className="mb-1.5 text-sm font-semibold text-midnight md:text-base lg:pr-2">{step.title}</h3>
                   <p className="text-xs leading-relaxed text-midnight/55 md:text-sm">{step.description}</p>
                 </div>
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ol>
 
-        <div className="mt-6 grid grid-cols-2 gap-2 lg:grid-cols-4 md:mt-8 md:gap-3">
-          {benefits.map((benefit, index) => (
-            <div
-              key={benefit.title}
-              className="entrance flex items-start gap-2.5 border border-electric/15 bg-electric/5 px-3 py-3 md:px-4"
-              style={{ transitionDelay: `${(index + 4) * 0.06}s` }}
-            >
-              <benefit.icon size={17} className="mt-0.5 shrink-0 text-electric" strokeWidth={1.7} aria-hidden="true" />
-              <div>
-                <p className="text-xs font-semibold text-midnight md:text-sm">{benefit.title}</p>
-                <p className="mt-0.5 text-[11px] leading-snug text-midnight/50 md:text-xs">{benefit.detail}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <PartsSearchHelpSection />
       </div>
     </section>
   )

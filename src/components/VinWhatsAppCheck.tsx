@@ -1,5 +1,5 @@
 import { useId, useState, type ChangeEvent, type ClipboardEvent, type FormEvent, type KeyboardEvent } from 'react'
-import { AlertCircle, CheckCircle2, MessageCircle } from 'lucide-react'
+import { AlertCircle, CheckCircle2, ChevronDown, Fingerprint, MessageCircle } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { createWhatsAppUrl, trackWhatsAppConversion } from '../lib/whatsapp'
 
@@ -20,6 +20,8 @@ export default function VinWhatsAppCheck() {
   const inputId = useId()
   const helpId = useId()
   const errorId = useId()
+  const panelId = useId()
+  const [isOpen, setIsOpen] = useState(false)
   const [vin, setVin] = useState('')
   const [validatedVin, setValidatedVin] = useState('')
   const [status, setStatus] = useState<ValidationStatus>('idle')
@@ -74,14 +76,31 @@ export default function VinWhatsAppCheck() {
     : ''
 
   return (
-    <div className="entrance mx-auto mb-8 max-w-5xl border border-silver bg-silver/30 p-4 shadow-sm md:mb-10 md:p-5" style={{ transitionDelay: '0.15s' }}>
-      <div className="grid gap-4 lg:grid-cols-[0.7fr_1.3fr] lg:items-start lg:gap-6">
-        <div className="lg:pt-5">
-          <h3 className="text-lg font-semibold tracking-tight text-midnight md:text-xl">
-            Fahrzeug per VIN prüfen
-          </h3>
-        </div>
+    <div className="entrance mx-auto mt-7 max-w-5xl border border-silver/80 bg-silver/20 md:mt-9" style={{ transitionDelay: '0.15s' }}>
+      <button
+        type="button"
+        onClick={() => setIsOpen((open) => !open)}
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        className="flex min-h-14 w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-silver/30 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-electric/25 md:px-5"
+      >
+        <span className="flex min-w-0 items-center gap-3">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center bg-electric/10 text-electric">
+            <Fingerprint size={18} strokeWidth={1.7} aria-hidden="true" />
+          </span>
+          <span>
+            <span className="block text-sm font-semibold text-midnight md:text-base">VIN zur Anfrage hinzufügen</span>
+            <span className="mt-0.5 block text-xs text-midnight/55">Optional für eine genauere Fahrzeugzuordnung</span>
+          </span>
+        </span>
+        <ChevronDown
+          size={19}
+          className={`shrink-0 text-midnight/45 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          aria-hidden="true"
+        />
+      </button>
 
+      <div id={panelId} hidden={!isOpen} className="border-t border-silver/80 px-4 pb-4 pt-4 md:px-5 md:pb-5">
         <form onSubmit={handleSubmit} noValidate>
           <label htmlFor={inputId} className="mb-2 block text-sm font-semibold text-midnight">
             VIN / Fahrgestellnummer
