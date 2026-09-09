@@ -12,16 +12,16 @@ export default function ReviewsSection() {
       </p>
       <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
         <strong id="reviews-title" className="text-4xl font-semibold leading-none md:text-5xl">
-          4,9/5
+          4,7/5
         </strong>
-        <div className="flex gap-1" aria-label="4,9 von 5 Sternen bei Google">
+        <div className="flex gap-1" aria-label="4,7 von 5 Sternen bei Google">
           {[0, 1, 2, 3, 4].map((star) => (
             <Star key={star} size={20} className="fill-electric text-electric" aria-hidden="true" />
           ))}
         </div>
       </div>
       <p className="mt-3 text-sm text-white/70">
-        Basierend auf 38 Google Bewertungen für B&amp;C Fahrzeugteile.
+        Basierend auf 39 Google Bewertungen für B&amp;C Fahrzeugteile.
       </p>
       <p className="mt-2 text-sm leading-relaxed text-white/55">
         Die Bewertung gehört zum Google-Profil von B&amp;C Fahrzeugteile, dem physischen Fahrzeugteilehandel hinter TeilePilot24.
