@@ -58,6 +58,12 @@ export const STATIC_ROUTE_METADATA = {
     canonicalPath: '/widerrufsformular',
     robots: INDEX_ROBOTS,
   },
+  '/ki-assistent': {
+    title: 'KI-Assistent für Autoteile | TeilePilot24',
+    description: 'Fragen zu Ersatzteilen, VIN, OEM-Nummern oder Motoröl? Der TeilePilot24 KI-Assistent hilft bei der ersten Einschätzung – persönliche Teileprüfung per WhatsApp.',
+    canonicalPath: '/ki-assistent',
+    robots: NOINDEX_ROBOTS,
+  },
 } satisfies Record<string, PageMetadata>
 
 export const LEGAL_PRERENDER_PATHS = [
@@ -156,7 +162,8 @@ export function getRouteSeoState(pathname: string) {
 export function getPrerenderManifest() {
   return {
     indexablePaths: ['/', ...seoPages.filter((page) => isSeoPageIndexable(page.path)).map((page) => page.path)],
+    additionalIndexablePaths: [],
     legalPaths: [...LEGAL_PRERENDER_PATHS],
-    noindexPaths: seoPages.filter((page) => !isSeoPageIndexable(page.path)).map((page) => page.path),
+    noindexPaths: [...seoPages.filter((page) => !isSeoPageIndexable(page.path)).map((page) => page.path), '/ki-assistent'],
   }
 }

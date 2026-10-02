@@ -8,6 +8,7 @@ import Datenschutz from './pages/Datenschutz'
 import Widerrufsbelehrung from './pages/Widerrufsbelehrung'
 import Widerrufsformular from './pages/Widerrufsformular'
 import SeoPage from './pages/SeoPage'
+import KiAssistent from './pages/KiAssistent'
 import NotFound from './pages/NotFound'
 import { seoPages } from './data/seoPages'
 import CookieBanner from './components/CookieBanner'
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/datenschutz" element={<Datenschutz />} />
         <Route path="/widerrufsbelehrung" element={<Widerrufsbelehrung />} />
         <Route path="/widerrufsformular" element={<Widerrufsformular />} />
+        <Route path="/ki-assistent" element={<KiAssistent />} />
         {seoPages.map((page) => (
           <Route key={page.path} path={page.path} element={<SeoPage />} />
         ))}

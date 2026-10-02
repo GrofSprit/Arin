@@ -238,20 +238,22 @@ const sitemapPaths = parseSitemapPaths(readFileSync(sitemapFile, 'utf8'))
 assert(new Set(sitemapPaths).size === sitemapPaths.length, 'Sitemap contains duplicate URLs')
 assert(new Set(manifest.indexablePaths).size === manifest.indexablePaths.length, 'Route data contains duplicate indexable paths')
 assert(samePathSet(sitemapPaths, manifest.indexablePaths), 'Sitemap and central indexable route data are out of sync')
+assert(!manifest.additionalIndexablePaths.some((pathname) => sitemapPaths.includes(pathname)), 'Additional indexable routes must remain outside the sitemap')
 assert(!sitemapPaths.some((pathname) => manifest.noindexPaths.includes(pathname)), 'Sitemap contains a noindex route')
 assert(!manifest.legalPaths.some((pathname) => sitemapPaths.includes(pathname)), 'Legal routes must remain outside the sitemap')
 
-const prerenderPaths = [...manifest.indexablePaths, ...manifest.legalPaths, ...manifest.noindexPaths]
+const prerenderPaths = [...manifest.indexablePaths, ...manifest.additionalIndexablePaths, ...manifest.legalPaths, ...manifest.noindexPaths]
 assert(new Set(prerenderPaths).size === prerenderPaths.length, 'Prerender route list contains duplicates')
 const routeResults = new Map(prerenderPaths.map((pathname) => [pathname, serverModule.render(pathname)]))
 const notFoundResult = serverModule.renderNotFound()
 const auxiliaryResults = new Map([['/success', serverModule.renderSuccess()]])
-const indexableTitles = manifest.indexablePaths.map((pathname) => routeResults.get(pathname).metadata.title)
-const indexableCanonicals = manifest.indexablePaths.map((pathname) => routeResults.get(pathname).metadata.canonicalPath)
+const indexablePaths = [...manifest.indexablePaths, ...manifest.additionalIndexablePaths]
+const indexableTitles = indexablePaths.map((pathname) => routeResults.get(pathname).metadata.title)
+const indexableCanonicals = indexablePaths.map((pathname) => routeResults.get(pathname).metadata.canonicalPath)
 assert(new Set(indexableTitles).size === indexableTitles.length, 'Indexable prerender routes contain duplicate titles')
 assert(new Set(indexableCanonicals).size === indexableCanonicals.length, 'Indexable prerender routes contain duplicate canonicals')
 
-for (const pathname of manifest.indexablePaths) {
+for (const pathname of indexablePaths) {
   const robots = routeResults.get(pathname).metadata.robots ?? 'index, follow, max-image-preview:large'
   assert(!robots.toLowerCase().includes('noindex'), `${pathname}: sitemap route is unexpectedly noindex`)
 }
@@ -315,4 +317,4 @@ const htmlFiles = collectHtmlFiles(distDir)
 const expectedHtmlFiles = prerenderPaths.length + auxiliaryResults.size + staticNoindexAuxiliaryFiles.length + staticVerificationFiles.length + 1
 assert(htmlFiles.length === expectedHtmlFiles, `Expected ${expectedHtmlFiles} HTML files in dist, found ${htmlFiles.length}`)
 
-console.log(`[prerender] Validated ${manifest.indexablePaths.length} sitemap routes, ${manifest.legalPaths.length} legal routes, ${manifest.noindexPaths.length} noindex routes, ${auxiliaryResults.size} auxiliary route, ${staticNoindexAuxiliaryFiles.length} static noindex auxiliary page, ${staticVerificationFiles.length} static verification file and 404.html.`)
+console.log(`[prerender] Validated ${manifest.indexablePaths.length} sitemap routes, ${manifest.additionalIndexablePaths.length} additional indexable route, ${manifest.legalPaths.length} legal routes, ${manifest.noindexPaths.length} noindex routes, ${auxiliaryResults.size} auxiliary route, ${staticNoindexAuxiliaryFiles.length} static noindex auxiliary page, ${staticVerificationFiles.length} static verification file and 404.html.`)
