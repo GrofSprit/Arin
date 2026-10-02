@@ -27,7 +27,7 @@ type ChatFaqItem = {
 const welcomeMessage: ChatMessage = {
   id: 0,
   role: 'assistant',
-  text: 'Hallo! 👋 Du hast 3 KI-Fragen für die nächsten 7 Stunden. Frag mich einfach, was du möchtest.',
+  text: 'Hallo! 👋 Du hast 10 KI-Fragen für die nächsten 5 Stunden. Frag mich einfach, was du möchtest.',
 }
 
 const quickStarts = [
@@ -39,12 +39,13 @@ const quickStarts = [
 
 const DEMO_REPLY_DELAY_MS = 1000
 const API_TIMEOUT_MS = 15000
-const MAX_AI_QUESTIONS = 3
-const AI_WINDOW_MS = 7 * 60 * 60 * 1000
+const MAX_AI_QUESTIONS = 10
+const AI_WINDOW_MS = 5 * 60 * 60 * 1000
 const AI_QUOTA_STORAGE_KEY = 'teilepilot24_ki_quota'
 const EMPTY_QUOTA: AiQuota = { used: 0, startedAt: null }
 const apiErrorReply = 'Der KI-Assistent ist gerade nicht erreichbar. Du kannst dein Anliegen direkt über WhatsApp an TeilePilot24 senden.'
-const limitReply = 'Deine 3 KI-Fragen für diesen Zeitraum sind aufgebraucht. In 7 Stunden stehen dir wieder neue Fragen zur Verfügung. Für Fahrzeug- und Teilefragen kannst du TeilePilot24 direkt über WhatsApp kontaktieren.'
+const rateLimitReply = 'Du hast in kurzer Zeit zu viele Anfragen gesendet. Bitte versuche es später erneut oder kontaktiere TeilePilot24 direkt per WhatsApp.'
+const limitReply = 'Deine 10 KI-Fragen für diesen Zeitraum sind aufgebraucht. In 5 Stunden stehen dir wieder neue Fragen zur Verfügung. Für Fahrzeug- und Teilefragen kannst du TeilePilot24 direkt über WhatsApp kontaktieren.'
 const assistantWhatsAppUrl = createWhatsAppUrl(
   'Hallo TeilePilot24, ich komme vom KI-Assistenten und benötige Hilfe bei meinem Fahrzeug bzw. Ersatzteil.',
 )
@@ -110,6 +111,8 @@ const faqItems = [
   },
 ]
 
+class AiRateLimitError extends Error {}
+
 async function requestAiAnswer(message: string, signal: AbortSignal): Promise<string> {
   const response = await fetch('/api/ki-assistent', {
     method: 'POST',
@@ -117,6 +120,7 @@ async function requestAiAnswer(message: string, signal: AbortSignal): Promise<st
     body: JSON.stringify({ message }),
     signal,
   })
+  if (response.status === 429) throw new AiRateLimitError('KI rate limit exceeded')
   if (!response.ok) throw new Error('KI request failed')
 
   const payload: unknown = await response.json()
@@ -224,10 +228,6 @@ export default function KiAssistent() {
       return true
     }
 
-    // Start the seven-hour window on the first real API attempt, even if it fails.
-    const activeQuota = currentQuota.startedAt === null ? { ...currentQuota, startedAt: now } : currentQuota
-    updateQuota(activeQuota)
-
     const controller = new AbortController()
     requestAbortRef.current = controller
     const timeout = window.setTimeout(() => controller.abort(), API_TIMEOUT_MS)
@@ -243,7 +243,7 @@ export default function KiAssistent() {
         updateQuota(nextQuota)
         finishReply(answer, true)
       })
-      .catch(() => finishReply(apiErrorReply, true))
+      .catch((error: unknown) => finishReply(error instanceof AiRateLimitError ? rateLimitReply : apiErrorReply, true))
       .finally(() => {
         window.clearTimeout(timeout)
         if (requestAbortRef.current === controller) requestAbortRef.current = null
