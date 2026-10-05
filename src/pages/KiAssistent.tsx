@@ -140,12 +140,12 @@ export default function KiAssistent() {
   const [isTyping, setIsTyping] = useState(false)
   const [isFaqOpen, setIsFaqOpen] = useState(false)
   const [quota, setQuota] = useState<AiQuota>(EMPTY_QUOTA)
-  const [soundEnabled, setSoundEnabled] = useState(false)
+  const [soundEnabled, setSoundEnabled] = useState(true)
   const [mobileFocus, setMobileFocus] = useState(false)
   const [showScrollDown, setShowScrollDown] = useState(false)
   const shellRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
-  const soundRef = useRef(false)
+  const soundRef = useRef(true)
   const audioRef = useRef<AudioContext | null>(null)
   const followMessagesRef = useRef(true)
   const nextMessageId = useRef(1)
@@ -161,6 +161,14 @@ export default function KiAssistent() {
     quotaRef.current = nextQuota
     setQuota(nextQuota)
     saveAiQuota(nextQuota)
+  }
+
+  function prepareReplySound() {
+    if (!soundRef.current) return
+    try {
+      audioRef.current ??= new AudioContext()
+      void audioRef.current.resume().catch(() => {})
+    } catch { /* Browser audio restrictions must not interrupt the chat. */ }
   }
 
   function toggleSound() {
@@ -296,6 +304,7 @@ export default function KiAssistent() {
   function startReply(text: string) {
     const cleanText = text.trim()
     if (pendingReplyRef.current || !cleanText) return false
+    prepareReplySound()
 
     // The ref blocks a second submit before React renders the disabled button.
     pendingReplyRef.current = true
@@ -339,6 +348,7 @@ export default function KiAssistent() {
 
   function startFaqReply(item: ChatFaqItem) {
     if (pendingReplyRef.current) return
+    prepareReplySound()
     pendingReplyRef.current = true
     followMessagesRef.current = true
     setIsFaqOpen(false)
