@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
-import { ArrowRight, Bot, ChevronDown, LoaderCircle, MessageCircle, Send, ShieldCheck, Sparkles } from 'lucide-react'
+import { ArrowRight, ArrowDown, ChevronDown, LoaderCircle, MessageCircle, Send, Sparkles, Volume2, VolumeX, X } from 'lucide-react'
+import KiAvatar from '../components/KiAvatar'
+import './KiAssistent.css'
 
 import { usePageMetadata } from '../hooks/usePageMetadata'
 import { STATIC_ROUTE_METADATA } from '../lib/routeSeo'
@@ -138,6 +140,14 @@ export default function KiAssistent() {
   const [isTyping, setIsTyping] = useState(false)
   const [isFaqOpen, setIsFaqOpen] = useState(false)
   const [quota, setQuota] = useState<AiQuota>(EMPTY_QUOTA)
+  const [soundEnabled, setSoundEnabled] = useState(false)
+  const [mobileFocus, setMobileFocus] = useState(false)
+  const [showScrollDown, setShowScrollDown] = useState(false)
+  const shellRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+  const soundRef = useRef(false)
+  const audioRef = useRef<AudioContext | null>(null)
+  const followMessagesRef = useRef(true)
   const nextMessageId = useRef(1)
   const messageListRef = useRef<HTMLDivElement>(null)
   const pendingReplyRef = useRef(false)
@@ -153,8 +163,80 @@ export default function KiAssistent() {
     saveAiQuota(nextQuota)
   }
 
+  function toggleSound() {
+    const enabled = !soundRef.current
+    if (enabled) {
+      try {
+        audioRef.current ??= new AudioContext()
+        void audioRef.current.resume().catch(() => {})
+      } catch {
+        return
+      }
+    }
+    soundRef.current = enabled
+    setSoundEnabled(enabled)
+  }
+
+  function playReplySound() {
+    const context = audioRef.current
+    if (!soundRef.current || !context || context.state !== 'running' || document.hidden) return
+    try {
+      const tone = context.createOscillator()
+      const gain = context.createGain()
+      tone.type = 'sine'
+      tone.frequency.setValueAtTime(660, context.currentTime)
+      tone.frequency.exponentialRampToValueAtTime(880, context.currentTime + 0.12)
+      gain.gain.setValueAtTime(0, context.currentTime)
+      gain.gain.linearRampToValueAtTime(0.045, context.currentTime + 0.015)
+      gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.22)
+      tone.connect(gain)
+      gain.connect(context.destination)
+      tone.start()
+      tone.stop(context.currentTime + 0.24)
+      tone.onended = () => { tone.disconnect(); gain.disconnect() }
+    } catch { /* Audio must never interrupt the chat. */ }
+  }
+
+  useEffect(() => () => { void audioRef.current?.close().catch(() => {}) }, [])
+
   useEffect(() => {
-    if (messages.length > 1 && messageListRef.current) {
+    if (!mobileFocus) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    let frame = 0
+    const update = () => {
+      window.cancelAnimationFrame(frame)
+      frame = window.requestAnimationFrame(() => {
+        if (window.innerWidth >= 640) {
+          setMobileFocus(false)
+          return
+        }
+        const viewport = window.visualViewport
+        shellRef.current?.style.setProperty('--tp-viewport-height', `${viewport?.height ?? window.innerHeight}px`)
+        shellRef.current?.style.setProperty('--tp-viewport-top', `${viewport?.offsetTop ?? 0}px`)
+        if (followMessagesRef.current && messageListRef.current) messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+      })
+    }
+    update()
+    window.visualViewport?.addEventListener('resize', update)
+    window.visualViewport?.addEventListener('scroll', update)
+    window.addEventListener('resize', update)
+    const escape = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') { inputRef.current?.blur(); setMobileFocus(false) }
+    }
+    window.addEventListener('keydown', escape)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.cancelAnimationFrame(frame)
+      window.visualViewport?.removeEventListener('resize', update)
+      window.visualViewport?.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+      window.removeEventListener('keydown', escape)
+    }
+  }, [mobileFocus])
+
+  useEffect(() => {
+    if (messages.length > 1 && messageListRef.current && followMessagesRef.current) {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }
   }, [messages, isTyping])
@@ -208,6 +290,7 @@ export default function KiAssistent() {
     setIsTyping(false)
     pendingReplyRef.current = false
     replyTimerRef.current = null
+    playReplySound()
   }
 
   function startReply(text: string) {
@@ -216,6 +299,8 @@ export default function KiAssistent() {
 
     // The ref blocks a second submit before React renders the disabled button.
     pendingReplyRef.current = true
+    followMessagesRef.current = true
+    setIsFaqOpen(false)
     const userMessage: ChatMessage = { id: nextMessageId.current++, role: 'user', text: cleanText }
     setMessages((current) => [...current, userMessage])
     setIsTyping(true)
@@ -255,6 +340,7 @@ export default function KiAssistent() {
   function startFaqReply(item: ChatFaqItem) {
     if (pendingReplyRef.current) return
     pendingReplyRef.current = true
+    followMessagesRef.current = true
     setIsFaqOpen(false)
     setMessages((current) => [...current, { id: nextMessageId.current++, role: 'user', text: item.question }])
     setIsTyping(true)
@@ -277,47 +363,61 @@ export default function KiAssistent() {
   return (
     <>
       <Navigation transparent={false} />
-      <main className="bg-silver/50 pt-[72px] text-midnight">
-        <section className="mx-auto max-w-[980px] md:px-8 md:py-10 lg:py-12" aria-labelledby="assistant-title">
-          <div className="flex h-[calc(100dvh-72px)] min-h-[620px] flex-col overflow-hidden bg-white shadow-card md:h-[720px] md:max-h-[calc(100dvh-152px)] md:min-h-[620px] md:border md:border-silver">
-            <header className="border-b border-silver bg-midnight px-5 pb-5 pt-6 text-white sm:px-7 md:px-9 md:py-7">
-              <div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/65">
-                <span className="inline-flex h-8 w-8 items-center justify-center bg-electric text-white" aria-hidden="true">
-                  <Sparkles size={17} />
-                </span>
-                TeilePilot24 <span className="text-white/35">/</span> KI-Assistent
+      <main className="min-h-screen bg-[radial-gradient(ellipse_at_top,_#eaf0ff_0%,_#f8faff_50%,_#f7f9fc_100%)] pt-[72px] text-midnight">
+        <section className="mx-auto max-w-[960px] px-3 pb-10 pt-5 sm:px-6 md:pt-8 lg:px-8" aria-labelledby="assistant-title">
+          <div className="mb-6 text-center md:mb-8">
+            <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-electric">
+              <Sparkles size={15} aria-hidden="true" /> TeilePilot24 KI-Assistent
+            </p>
+            <h1 id="assistant-title" className="mt-3 text-[32px] font-semibold leading-tight tracking-[-0.035em] sm:text-[38px] lg:text-[46px]">
+              Dein Auto. Deine Frage.
+            </h1>
+            <p className="mx-auto mt-3 max-w-[640px] text-sm leading-relaxed text-midnight/65 sm:text-base">
+              TeilePilot hilft dir weiter – von der ersten Frage bis zur persönlichen Teileprüfung.
+            </p>
+          </div>
+
+          <div ref={shellRef} data-mobile-focus={mobileFocus} className="tp-chat-shell flex h-[calc(100dvh-235px)] min-h-[420px] flex-col overflow-hidden rounded-[24px] border border-[#e1e7f0] bg-white shadow-[0_18px_60px_rgba(40,63,128,0.10)] sm:h-[610px] lg:h-[580px]">
+            <header className="tp-chat-header flex shrink-0 items-center gap-2 border-b border-[#e8edf4] bg-white px-3 py-2.5 sm:gap-3 sm:px-5">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#edf2ff]" aria-hidden="true">
+                <KiAvatar thinking={isTyping} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-sm font-semibold leading-tight sm:text-base">TeilePilot KI</h2>
+                <p className="mt-1 truncate text-[11px] text-midnight/50">{isTyping ? 'Denkt gerade nach …' : 'Bereit für deine Frage'}</p>
               </div>
-              <h1 id="assistant-title" className="text-2xl font-semibold leading-tight sm:text-3xl md:text-4xl">
-                TeilePilot KI-Assistent
-              </h1>
-              <p className="mt-3 inline-flex border border-white/20 px-3 py-1.5 text-xs font-semibold text-white/90 sm:text-sm" aria-live="polite">
-                KI-Fragen: {MAX_AI_QUESTIONS - quota.used} von {MAX_AI_QUESTIONS} verfügbar
-              </p>
-              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/75 md:text-base">
-                Fragen zu Ersatzteilen, Fahrzeugen oder Wartung? Unser digitaler Assistent hilft dir bei der ersten Einschätzung.
-              </p>
-              <p className="mt-3 flex max-w-2xl items-start gap-2 text-xs leading-relaxed text-white/60 sm:text-sm">
-                <ShieldCheck size={16} className="mt-0.5 shrink-0 text-electric" aria-hidden="true" />
-                Für eine verbindliche Teilezuordnung prüfen wir dein Fahrzeug anschließend persönlich.
-              </p>
+              <span className={`shrink-0 rounded-full bg-[#edf4ff] px-2.5 py-1.5 text-[11px] font-semibold text-electric ${mobileFocus ? 'hidden sm:inline-flex' : ''}`} aria-live="polite" aria-label={`${MAX_AI_QUESTIONS - quota.used} von ${MAX_AI_QUESTIONS} KI-Fragen verfügbar`}>
+                {MAX_AI_QUESTIONS - quota.used}/{MAX_AI_QUESTIONS} <span className="ml-1 hidden sm:inline">Fragen</span>
+              </span>
+              <button type="button" onClick={toggleSound} aria-label={soundEnabled ? 'Antwortton ausschalten' : 'Antwortton einschalten'} aria-pressed={soundEnabled} title={soundEnabled ? 'Antwortton an' : 'Antwortton aus'} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-midnight/55 hover:bg-silver/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-electric">
+                {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+              </button>
+              {mobileFocus && <button type="button" onClick={() => { inputRef.current?.blur(); setMobileFocus(false) }} aria-label="Chat-Vollbild schließen" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-silver/40 text-midnight sm:hidden"><X size={19} /></button>}
             </header>
 
+            <div className="relative min-h-0 flex-1">
             <div
               ref={messageListRef}
               role="log"
               aria-label="Chatverlauf"
               aria-live="polite"
               aria-relevant="additions"
-              className="min-h-0 flex-1 space-y-5 overflow-y-auto bg-[#f8f9fc] px-5 py-6 sm:px-7 md:px-9"
+              onScroll={(event) => {
+                const list = event.currentTarget
+                const nearBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 64
+                followMessagesRef.current = nearBottom
+                setShowScrollDown(!nearBottom)
+              }}
+              className="tp-chat-scroll h-full space-y-5 overflow-y-auto bg-[#fbfcfe] px-3 py-5 sm:px-6 sm:py-6"
             >
               {messages.map((message) => (
-                <div key={message.id} className={`flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
+                <div key={message.id} className={`tp-message flex items-start gap-2 sm:gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
                   {message.role === 'assistant' && (
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center bg-midnight text-white" aria-hidden="true">
-                      <Bot size={19} />
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#e9f0ff] text-electric" aria-hidden="true">
+                      <KiAvatar />
                     </span>
                   )}
-                  <div className={`max-w-[min(86%,620px)] px-4 py-3.5 text-sm leading-relaxed shadow-sm sm:text-base ${message.role === 'user' ? 'bg-electric text-white' : 'border border-silver bg-white text-midnight'}`}>
+                  <div className={`min-w-0 max-w-[min(85%,660px)] rounded-2xl px-3.5 py-3 text-[15px] leading-relaxed sm:px-4 ${message.role === 'user' ? 'rounded-br-md bg-electric text-white' : 'rounded-bl-md border border-[#e6ebf2] bg-white text-midnight shadow-sm'}`}>
                     <span className="sr-only">{message.role === 'user' ? 'Deine Nachricht: ' : 'TeilePilot Assistent: '}</span>
                     <p className="whitespace-pre-line">
                       {message.id === 0 && quota.used > 0
@@ -325,7 +425,7 @@ export default function KiAssistent() {
                         : message.text}
                     </p>
                     {message.id === 0 && (
-                      <p className="mt-2 text-xs leading-relaxed text-midnight/60">
+                      <p className="mt-2 text-xs leading-relaxed text-midnight/55">
                         Die häufig gestellten Fragen unten sind kostenlos und verbrauchen kein KI-Kontingent.
                       </p>
                     )}
@@ -335,9 +435,9 @@ export default function KiAssistent() {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={trackWhatsAppConversion}
-                        className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 bg-whatsapp px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-whatsapp-dark sm:w-auto"
+                        className="mt-4 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg bg-whatsapp px-3 py-2 text-center text-xs font-semibold text-white transition-colors hover:bg-whatsapp-dark sm:w-auto sm:text-sm"
                       >
-                        <MessageCircle size={17} aria-hidden="true" />
+                        <MessageCircle size={16} aria-hidden="true" />
                         Passendes Teil per WhatsApp prüfen lassen
                       </a>
                     )}
@@ -347,10 +447,10 @@ export default function KiAssistent() {
 
               {isTyping && (
                 <div className="flex items-start gap-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center bg-midnight text-white" aria-hidden="true">
-                    <Bot size={19} />
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#e9f0ff] text-electric" aria-hidden="true">
+                    <KiAvatar thinking />
                   </span>
-                  <div className="inline-flex min-h-12 items-center gap-3 border border-silver bg-white px-4 py-3 text-sm text-midnight/70 shadow-sm sm:text-base">
+                  <div className="inline-flex min-h-11 items-center gap-3 rounded-2xl rounded-bl-md border border-[#e6ebf2] bg-white px-4 py-2.5 text-sm text-midnight/65 shadow-sm">
                     <span>TeilePilot denkt …</span>
                     <span className="inline-flex items-center gap-1" aria-hidden="true">
                       {[0, 1, 2].map((dot) => (
@@ -366,87 +466,98 @@ export default function KiAssistent() {
               )}
 
               {messages.length === 1 && (
-                <div className="pl-0 sm:pl-12">
-                  <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-midnight/45">Schnell starten</p>
+                <div className="pl-0 sm:pl-11">
+                  <p className="mb-2 text-xs font-medium text-midnight/45">Oder starte mit einem Beispiel:</p>
                   <div className="flex flex-wrap gap-2">
                     {quickStarts.map((prompt) => (
                       <button
                         key={prompt}
                         type="button"
+                        disabled={isTyping}
                         onClick={() => startReply(prompt)}
-                        className="min-h-10 border border-electric/25 bg-white px-3 py-2 text-left text-xs font-medium text-electric transition-colors hover:border-electric hover:bg-electric/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric sm:text-sm"
+                        className="min-h-11 rounded-xl border border-[#dce5f4] bg-white px-3 py-2 text-left text-xs font-medium text-midnight/75 transition-colors hover:border-electric hover:text-electric disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric sm:text-sm"
                       >
                         {prompt}
                       </button>
                     ))}
                   </div>
+                  <p className="mt-2 text-[11px] text-midnight/45">Beispiele verwenden eine KI-Frage.</p>
                 </div>
               )}
             </div>
-
-            <div className="border-t border-silver bg-white px-5 py-4 sm:px-7 md:px-9">
-              <button
-                type="button"
-                onClick={() => setIsFaqOpen((open) => !open)}
-                aria-expanded={isFaqOpen}
-                aria-controls="assistant-chat-faq"
-                className="mb-3 inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-electric hover:text-electric-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric"
-              >
-                Häufig gestellte Fragen
-                <ChevronDown size={17} className={`transition-transform ${isFaqOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
-              </button>
-              {isFaqOpen && (
-                <div id="assistant-chat-faq" className="mb-4 grid max-h-52 grid-cols-1 gap-2 overflow-y-auto border border-silver bg-[#f8f9fc] p-2 sm:grid-cols-2" aria-label="Kostenlose häufig gestellte Fragen">
-                  {chatFaqItems.map((item) => (
-                    <button
-                      key={item.question}
-                      type="button"
-                      disabled={isTyping}
-                      onClick={() => startFaqReply(item)}
-                      className="min-h-11 border border-silver bg-white px-3 py-2 text-left text-xs font-medium leading-snug text-midnight transition-colors hover:border-electric hover:text-electric disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
-                    >
-                      {item.question}
-                    </button>
-                  ))}
+            {showScrollDown && !isFaqOpen && <button type="button" aria-label="Zu den neuesten Nachrichten" onClick={() => { followMessagesRef.current = true; messageListRef.current?.scrollTo({ top: messageListRef.current.scrollHeight }); setShowScrollDown(false) }} className="absolute bottom-3 right-4 flex h-11 w-11 items-center justify-center rounded-full border border-silver bg-white text-electric shadow-lg"><ArrowDown size={19} /></button>}
+            {isFaqOpen && (
+              <div id="assistant-chat-faq" className="absolute inset-0 z-10 flex min-h-0 flex-col bg-[#f8faff]" role="region" aria-label="Kostenlose häufig gestellte Fragen">
+                <div className="flex shrink-0 items-center justify-between gap-2 border-b border-silver px-4 py-2">
+                  <div><h3 className="text-sm font-semibold">Häufige Fragen</h3><p className="text-xs text-midnight/55">Kostenlos · ohne KI-Kontingent</p></div>
+                  <button type="button" aria-label="Häufige Fragen schließen" onClick={() => setIsFaqOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-xl hover:bg-silver/50"><X size={18} /></button>
                 </div>
-              )}
-              <form onSubmit={sendMessage} className="flex items-end gap-2" aria-label="Frage eingeben">
+                <div className="tp-chat-scroll min-h-0 flex-1 overflow-y-auto p-3">
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {chatFaqItems.map((item) => <button key={item.question} type="button" disabled={isTyping} onClick={() => startFaqReply(item)} className="flex min-h-12 items-center justify-between gap-3 rounded-xl border border-[#e1e7f0] bg-white px-3 py-3 text-left text-sm leading-snug hover:border-electric disabled:opacity-50">{item.question}<ArrowRight size={15} className="shrink-0 text-electric" /></button>)}
+                  </div>
+                </div>
+              </div>
+            )}
+            </div>
+
+            <div className="tp-composer-wrap shrink-0 border-t border-[#e8edf4] bg-white px-3 pb-2 pt-3 sm:px-5 sm:pb-3">
+              <form onSubmit={sendMessage} className="tp-composer flex items-end gap-2 rounded-2xl border border-[#dce4ef] bg-white p-1.5 transition-shadow focus-within:border-electric" aria-label="Frage eingeben">
                 <label htmlFor="assistant-question" className="sr-only">Deine Frage zum Fahrzeug oder Ersatzteil</label>
                 <textarea
                   id="assistant-question"
+                  ref={inputRef}
+                  onFocus={() => { if (window.innerWidth < 640) setMobileFocus(true); setIsFaqOpen(false) }}
                   value={draft}
                   onChange={(event) => setDraft(event.target.value)}
                   onKeyDown={handleInputKeyDown}
                   maxLength={600}
                   rows={2}
-                  placeholder="Stell deine Frage zum Fahrzeug oder Ersatzteil …"
-                  className="min-h-12 w-full resize-none border border-silver bg-white px-3 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-electric focus:outline-none focus:ring-2 focus:ring-electric/15 sm:text-base"
+                  placeholder="Schreib deine Frage …"
+                  className="min-h-11 min-w-0 w-full resize-none border-0 bg-transparent px-2.5 py-2 text-base text-midnight placeholder:text-midnight/40 focus:outline-none"
                 />
                 <button
                   type="submit"
                   disabled={!draft.trim() || isTyping}
-                  className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 bg-electric px-4 text-sm font-semibold text-white transition-colors hover:bg-electric-dark disabled:cursor-not-allowed disabled:opacity-45 sm:px-5"
+                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-electric text-white transition-colors hover:bg-electric-dark disabled:cursor-not-allowed disabled:opacity-40"
                   aria-label={isTyping ? 'Antwort wird vorbereitet' : 'Nachricht senden'}
                 >
-                  {isTyping ? <LoaderCircle size={18} className="motion-safe:animate-spin" aria-hidden="true" /> : <Send size={18} aria-hidden="true" />}
-                  <span className="hidden sm:inline">{isTyping ? 'Warten …' : 'Senden'}</span>
+                  {isTyping ? <LoaderCircle size={19} className="motion-safe:animate-spin" aria-hidden="true" /> : <Send size={19} aria-hidden="true" />}
                 </button>
               </form>
-              <p className="mt-2 text-[11px] leading-relaxed text-midnight/55 sm:text-xs">
-                Der KI-Assistent kann Fehler machen. Für die verbindliche Prüfung von Ersatzteilen benötigen wir je nach Fahrzeug VIN, OEM-Nummer oder Fahrzeugschein.
-              </p>
-              <a
-                href={assistantWhatsAppUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={trackWhatsAppConversion}
-                className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 bg-whatsapp px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-whatsapp-dark md:hidden"
-              >
-                <MessageCircle size={17} aria-hidden="true" />
-                Passendes Teil per WhatsApp prüfen lassen
-              </a>
+              <div className="mt-2 flex items-center justify-between gap-2">
+                <button
+                  type="button"
+                  onClick={() => { inputRef.current?.blur(); setIsFaqOpen((open) => !open) }}
+                  aria-expanded={isFaqOpen}
+                  aria-controls="assistant-chat-faq"
+                  className="inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-electric hover:text-electric-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric"
+                >
+                  Häufige Fragen <ChevronDown size={15} className={`transition-transform ${isFaqOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+                </button>
+                <span className="text-[11px] text-midnight/40">{draft.length > 500 ? `${draft.length} / 600` : <span className="hidden sm:inline">Enter zum Senden</span>}</span>
+              </div>
             </div>
           </div>
+
+          <div className="mt-4 flex flex-col gap-3 rounded-xl border border-[#e1e7f0] bg-white p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+            <div>
+              <p className="text-sm font-semibold">Du brauchst ein konkretes Ersatzteil?</p>
+              <p className="mt-1 text-xs leading-relaxed text-midnight/60 sm:text-sm">Unser Team prüft deine Fahrzeugdaten persönlich und erstellt danach ein Angebot.</p>
+            </div>
+            <a
+              href={assistantWhatsAppUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={trackWhatsAppConversion}
+              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-whatsapp px-4 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-whatsapp-dark"
+            >
+              <MessageCircle size={17} aria-hidden="true" /> Per WhatsApp anfragen
+            </a>
+          </div>
+          <p className="mt-4 text-center text-xs leading-relaxed text-midnight/50">
+            KI-Antworten können Fehler enthalten. Eine verbindliche Teilezuordnung erfolgt erst nach persönlicher Prüfung.
+          </p>
         </section>
 
         <section aria-labelledby="assistant-info-title" className="bg-white px-5 py-14 md:px-10 md:py-20">
