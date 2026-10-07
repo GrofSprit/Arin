@@ -1,6 +1,7 @@
 import Navigation from '../sections/Navigation'
 import TrustBar from '../sections/TrustBar'
 import Hero from '../sections/Hero'
+import KiAssistentSection from '../sections/KiAssistentSection'
 import PartsCategory from '../sections/PartsCategory'
 import PopularBrandsSection from '../sections/PopularBrandsSection'
 import HowItWorks from '../sections/HowItWorks'
@@ -23,6 +24,7 @@ export default function Home() {
       <TrustBar />
       <main>
         <Hero />
+        <KiAssistentSection />
         <PartsCategory />
         <PopularBrandsSection />
         <HowItWorks />

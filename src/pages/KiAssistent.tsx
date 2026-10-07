@@ -4,7 +4,8 @@ import KiAvatar from '../components/KiAvatar'
 import './KiAssistent.css'
 
 import { usePageMetadata } from '../hooks/usePageMetadata'
-import { STATIC_ROUTE_METADATA } from '../lib/routeSeo'
+import { getKiAssistentJsonLd, STATIC_ROUTE_METADATA } from '../lib/routeSeo'
+import { kiAssistentFaqItems as faqItems } from '../data/kiAssistentFaq'
 import { createWhatsAppUrl, trackWhatsAppConversion } from '../lib/whatsapp'
 import Footer from '../sections/Footer'
 import Navigation from '../sections/Navigation'
@@ -94,25 +95,6 @@ const chatFaqItems: ChatFaqItem[] = [
   { question: 'Kann ich meinen Fahrzeugschein per WhatsApp senden?', answer: 'Ja, du kannst den Fahrzeugschein für eine Teileanfrage per WhatsApp an TeilePilot24 senden. Nicht benötigte persönliche Angaben kannst du abdecken; die für die Prüfung erforderlichen Fahrzeugdaten sollten lesbar bleiben.' },
 ]
 
-const faqItems = [
-  {
-    question: 'Kann die KI das passende Ersatzteil eindeutig bestimmen?',
-    answer: 'Nein. Eine erste Einschätzung ersetzt keine verbindliche Teilezuordnung. Dafür prüft TeilePilot24 deine Fahrzeugdaten persönlich.',
-  },
-  {
-    question: 'Kann ich meine VIN eingeben?',
-    answer: 'Aus einer VIN allein kann der Assistent Fahrzeug- oder Teiledaten nicht verlässlich bestätigen. Für eine konkrete Teileanfrage kannst du die VIN oder den Fahrzeugschein über WhatsApp an TeilePilot24 senden.',
-  },
-  {
-    question: 'Kann der Assistent auch bei Motoröl helfen?',
-    answer: 'Der Assistent kann Fragen zu Motoröl und Wartung einordnen. Die richtige Ölfreigabe hängt vom Fahrzeug ab und sollte vor der Bestellung geprüft werden.',
-  },
-  {
-    question: 'Wie bekomme ich ein konkretes Angebot?',
-    answer: 'Sende Fahrzeugschein oder VIN und das gesuchte Teil per WhatsApp. TeilePilot24 prüft die Angaben persönlich und erstellt ein Angebot.',
-  },
-]
-
 class AiRateLimitError extends Error {}
 
 async function requestAiAnswer(message: string, signal: AbortSignal): Promise<string> {
@@ -134,6 +116,21 @@ async function requestAiAnswer(message: string, signal: AbortSignal): Promise<st
 
 export default function KiAssistent() {
   usePageMetadata(STATIC_ROUTE_METADATA['/ki-assistent'])
+
+  useEffect(() => {
+    const schemas = getKiAssistentJsonLd()
+    schemas.forEach(({ id, data }) => {
+      let script = document.getElementById(id) as HTMLScriptElement | null
+      if (!script) {
+        script = document.createElement('script')
+        script.id = id
+        script.type = 'application/ld+json'
+        document.head.appendChild(script)
+      }
+      script.textContent = JSON.stringify(data)
+    })
+    return () => schemas.forEach(({ id }) => document.getElementById(id)?.remove())
+  }, [])
 
   const [messages, setMessages] = useState<ChatMessage[]>([welcomeMessage])
   const [draft, setDraft] = useState('')
@@ -380,7 +377,7 @@ export default function KiAssistent() {
               <Sparkles size={15} aria-hidden="true" /> TeilePilot24 KI-Assistent
             </p>
             <h1 id="assistant-title" className="mt-3 text-[32px] font-semibold leading-tight tracking-[-0.035em] sm:text-[38px] lg:text-[46px]">
-              Dein Auto. Deine Frage.
+              Dein KI-Assistent für Autoteile
             </h1>
             <p className="mx-auto mt-3 max-w-[640px] text-sm leading-relaxed text-midnight/65 sm:text-base">
               TeilePilot hilft dir weiter – von der ersten Frage bis zur persönlichen Teileprüfung.

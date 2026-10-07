@@ -15,6 +15,22 @@ interface SeoPageLayoutProps {
   children?: ReactNode
 }
 
+// Deliberately limited to vehicle identification, part matching and related topics.
+const kiAssistantPaths = new Set([
+  '/vin-nummer',
+  '/fahrzeugschein-erklaert',
+  '/oem-nummer',
+  '/original-oder-oem',
+  '/pr-code-vag',
+  '/ersatzteile-mit-vin-pruefen',
+  '/welches-ersatzteil-passt',
+  '/bremsbelaege',
+  '/bremsscheiben',
+  '/oelfilter',
+  '/ratgeber/hsn-tsn-reicht-nicht',
+  '/ratgeber/autoteile-nach-teilenummer',
+])
+
 function setJsonLd(id: string, data: unknown) {
   let script = document.getElementById(id) as HTMLScriptElement | null
   if (!script) {
@@ -174,6 +190,18 @@ export default function SeoPageLayout({ page, children }: SeoPageLayoutProps) {
                 </section>
               ))}
               {children}
+              {kiAssistantPaths.has(page.path) && (
+                <section aria-labelledby="seo-ki-title" className="rounded-xl border border-electric/20 bg-electric/5 p-5 sm:p-6">
+                  <p className="text-xs font-semibold text-electric">Noch unsicher?</p>
+                  <h2 id="seo-ki-title" className="mt-2 text-xl font-semibold text-midnight">Frag den TeilePilot KI-Assistenten</h2>
+                  <p className="mt-3 text-sm leading-relaxed text-midnight/70">
+                    Stell deine Frage zu Ersatzteilen, VIN, OEM-Nummern, Motoröl oder deinem Fahrzeug direkt unserem KI-Assistenten.
+                  </p>
+                  <Link to="/ki-assistent" className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-electric px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-electric-dark focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-electric/30 focus-visible:ring-offset-2 sm:w-auto">
+                    KI-Assistent starten <ArrowRight size={17} className="shrink-0" aria-hidden="true" />
+                  </Link>
+                </section>
+              )}
             </article>
 
             <aside className="space-y-5 lg:sticky lg:top-28 lg:self-start">

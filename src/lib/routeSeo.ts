@@ -1,3 +1,4 @@
+import { kiAssistentFaqItems } from '../data/kiAssistentFaq'
 import {
   getSeoPageByPath,
   isSeoPageIndexable,
@@ -62,7 +63,7 @@ export const STATIC_ROUTE_METADATA = {
     title: 'KI-Assistent für Autoteile | TeilePilot24',
     description: 'Fragen zu Ersatzteilen, VIN, OEM-Nummern oder Motoröl? Der TeilePilot24 KI-Assistent hilft bei der ersten Einschätzung – persönliche Teileprüfung per WhatsApp.',
     canonicalPath: '/ki-assistent',
-    robots: NOINDEX_ROBOTS,
+    robots: 'index, follow',
   },
 } satisfies Record<string, PageMetadata>
 
@@ -144,10 +145,56 @@ export function getSeoPageJsonLd(page: SeoPageData): JsonLdEntry[] {
   return entries
 }
 
+export function getKiAssistentJsonLd(): JsonLdEntry[] {
+  const pageUrl = absoluteUrl('/ki-assistent')
+  return [
+    {
+      id: 'ki-application-schema',
+      data: {
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        '@id': `${pageUrl}#application`,
+        name: 'TeilePilot KI-Assistent',
+        url: pageUrl,
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Web',
+        description: STATIC_ROUTE_METADATA['/ki-assistent'].description,
+        provider: { '@id': absoluteUrl('/#business') },
+        publisher: { '@id': absoluteUrl('/#business') },
+      },
+    },
+    {
+      id: 'seo-breadcrumb-schema',
+      data: {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+          { '@type': 'ListItem', position: 2, name: 'KI-Assistent', item: pageUrl },
+        ],
+      },
+    },
+    {
+      id: 'seo-faq-schema',
+      data: {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${pageUrl}#faq`,
+        url: pageUrl,
+        mainEntity: kiAssistentFaqItems.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: { '@type': 'Answer', text: item.answer },
+        })),
+      },
+    },
+  ]
+}
+
 export function getRouteSeoState(pathname: string) {
   const staticMetadata = STATIC_ROUTE_METADATA[pathname as keyof typeof STATIC_ROUTE_METADATA]
   if (staticMetadata) {
-    return { metadata: staticMetadata, schemas: [] as JsonLdEntry[] }
+    return { metadata: staticMetadata, schemas: pathname === '/ki-assistent' ? getKiAssistentJsonLd() : [] as JsonLdEntry[] }
   }
 
   const page = getSeoPageByPath(pathname)
@@ -161,9 +208,9 @@ export function getRouteSeoState(pathname: string) {
 
 export function getPrerenderManifest() {
   return {
-    indexablePaths: ['/', ...seoPages.filter((page) => isSeoPageIndexable(page.path)).map((page) => page.path)],
+    indexablePaths: ['/', ...seoPages.filter((page) => isSeoPageIndexable(page.path)).map((page) => page.path), '/ki-assistent'],
     additionalIndexablePaths: [],
     legalPaths: [...LEGAL_PRERENDER_PATHS],
-    noindexPaths: [...seoPages.filter((page) => !isSeoPageIndexable(page.path)).map((page) => page.path), '/ki-assistent'],
+    noindexPaths: seoPages.filter((page) => !isSeoPageIndexable(page.path)).map((page) => page.path),
   }
 }
