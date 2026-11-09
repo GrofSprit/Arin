@@ -13,10 +13,14 @@ import NotFound from './pages/NotFound'
 import { seoPages } from './data/seoPages'
 import CookieBanner from './components/CookieBanner'
 
+import KatalogVorschau from './pages/KatalogVorschau'
+
 export default function App() {
   return (
     <>
       <Routes>
+        <Route path="/katalog" element={<KatalogVorschau />} />
+        {import.meta.env.DEV && <Route path="/katalog-vorschau" element={<KatalogVorschau />} />}
         <Route path="/" element={<Home />} />
         <Route path="/success" element={<Success />} />
         <Route path="/impressum" element={<Impressum />} />

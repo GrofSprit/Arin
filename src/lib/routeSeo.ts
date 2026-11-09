@@ -27,6 +27,12 @@ export interface JsonLdEntry {
 }
 
 export const STATIC_ROUTE_METADATA = {
+  '/katalog': {
+    title: 'Autoteile-Katalog | TeilePilot24',
+    description: 'Ersatzteile für Wartung und Reparatur entdecken. Passende Ausführung persönlich prüfen lassen und Preis und Lieferzeit per WhatsApp anfragen.',
+    canonicalPath: '/katalog',
+    robots: INDEX_ROBOTS,
+  },
   '/': {
     title: 'Autoersatzteile mit VIN- & OEM-Prüfung | TeilePilot24',
     description: 'Fahrzeugschein oder VIN per WhatsApp senden: TeilePilot24 prüft Fahrzeugdaten und OEM-Nummern persönlich und erstellt ein passendes Ersatzteil-Angebot.',
@@ -209,7 +215,7 @@ export function getRouteSeoState(pathname: string) {
 export function getPrerenderManifest() {
   return {
     indexablePaths: ['/', ...seoPages.filter((page) => isSeoPageIndexable(page.path)).map((page) => page.path), '/ki-assistent'],
-    additionalIndexablePaths: [],
+    additionalIndexablePaths: ['/katalog'],
     legalPaths: [...LEGAL_PRERENDER_PATHS],
     noindexPaths: seoPages.filter((page) => !isSeoPageIndexable(page.path)).map((page) => page.path),
   }

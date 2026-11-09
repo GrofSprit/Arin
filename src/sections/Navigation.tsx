@@ -8,6 +8,7 @@ interface NavigationProps {
 }
 
 const routeLinks = [
+  { label: 'Katalog', path: '/katalog' },
   { label: 'Ersatzteile', path: '/teile' },
   { label: 'Automarken', path: '/marken' },
   { label: 'Ratgeber', path: '/ratgeber' },
