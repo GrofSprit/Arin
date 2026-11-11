@@ -9,6 +9,7 @@ interface NavigationProps {
 
 const routeLinks = [
   { label: 'Katalog', path: '/katalog' },
+  { label: 'KI-Assistent', path: '/ki-assistent' },
   { label: 'Ersatzteile', path: '/teile' },
   { label: 'Automarken', path: '/marken' },
   { label: 'Ratgeber', path: '/ratgeber' },
@@ -94,8 +95,8 @@ export default function Navigation({ transparent = true }: NavigationProps) {
           </button>
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-5 xl:gap-7">
-            <nav aria-label="Hauptnavigation" className="flex items-center gap-5 xl:gap-7">
+          <div className="hidden lg:flex items-center gap-3 xl:gap-5">
+            <nav aria-label="Hauptnavigation" className="flex items-center gap-3 xl:gap-5">
               {routeLinks.map((link) => (
                 <Link
                   key={link.path}
@@ -105,7 +106,7 @@ export default function Navigation({ transparent = true }: NavigationProps) {
                   {link.label}
                 </Link>
               ))}
-              <div className="hidden xl:flex items-center gap-7">
+              <div className="hidden min-[1400px]:flex items-center gap-5">
                 {sectionLinks.map((link) => (
                   <button
                     key={link.id}

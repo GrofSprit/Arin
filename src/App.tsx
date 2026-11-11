@@ -11,6 +11,7 @@ import SeoPage from './pages/SeoPage'
 import KiAssistent from './pages/KiAssistent'
 import NotFound from './pages/NotFound'
 import { seoPages } from './data/seoPages'
+import KiHelpWidget from './components/KiHelpWidget'
 import CookieBanner from './components/CookieBanner'
 
 import KatalogVorschau from './pages/KatalogVorschau'
@@ -36,6 +37,7 @@ export default function App() {
 
       <Analytics />
       <CookieBanner />
+      <KiHelpWidget />
     </>
   )
 }

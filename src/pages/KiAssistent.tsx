@@ -132,6 +132,103 @@ export default function KiAssistent() {
     return () => schemas.forEach(({ id }) => document.getElementById(id)?.remove())
   }, [])
 
+  return (
+    <>
+      <Navigation transparent={false} />
+      <main className="min-h-screen bg-[radial-gradient(ellipse_at_top,_#eaf0ff_0%,_#f8faff_50%,_#f7f9fc_100%)] pt-[72px] text-midnight">
+        <section className="mx-auto max-w-[960px] px-3 pb-10 pt-5 sm:px-6 md:pt-8 lg:px-8" aria-labelledby="assistant-title">
+          <div className="mb-6 text-center md:mb-8">
+            <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-electric">
+              <Sparkles size={15} aria-hidden="true" /> TeilePilot24 KI-Assistent
+            </p>
+            <h1 id="assistant-title" className="mt-3 text-[32px] font-semibold leading-tight tracking-[-0.035em] sm:text-[38px] lg:text-[46px]">
+              Dein KI-Assistent für Autoteile
+            </h1>
+            <p className="mx-auto mt-3 max-w-[640px] text-sm leading-relaxed text-midnight/65 sm:text-base">
+              TeilePilot hilft dir weiter – von der ersten Frage bis zur persönlichen Teileprüfung.
+            </p>
+          </div>
+
+          <KiChat />
+
+          <div className="mt-4 flex flex-col gap-3 rounded-xl border border-[#e1e7f0] bg-white p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+            <div>
+              <p className="text-sm font-semibold">Du brauchst ein konkretes Ersatzteil?</p>
+              <p className="mt-1 text-xs leading-relaxed text-midnight/60 sm:text-sm">Unser Team prüft deine Fahrzeugdaten persönlich und erstellt danach ein Angebot.</p>
+            </div>
+            <a
+              href={assistantWhatsAppUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={trackWhatsAppConversion}
+              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-whatsapp px-4 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-whatsapp-dark"
+            >
+              <MessageCircle size={17} aria-hidden="true" /> Per WhatsApp anfragen
+            </a>
+          </div>
+          <p className="mt-4 text-center text-xs leading-relaxed text-midnight/50">
+            KI-Antworten können Fehler enthalten. Eine verbindliche Teilezuordnung erfolgt erst nach persönlicher Prüfung.
+          </p>
+        </section>
+
+        <section aria-labelledby="assistant-info-title" className="bg-white px-5 py-14 md:px-10 md:py-20">
+          <div className="mx-auto max-w-[980px]">
+            <p className="text-xs font-semibold uppercase tracking-wider text-electric">Erste Orientierung</p>
+            <h2 id="assistant-info-title" className="mt-3 max-w-3xl text-3xl font-semibold leading-tight text-midnight md:text-4xl">
+              KI-Assistent für Autoteile: Fragen stellen, Angaben besser einordnen
+            </h2>
+            <p className="mt-5 max-w-3xl text-base leading-relaxed text-midnight/70">
+              Ob du ein Ersatzteil suchst oder eine technische Angabe verstehen möchtest: Der Assistent bietet eine erste Orientierung. Ein konkretes Ersatzteil-Angebot entsteht erst nach persönlicher Prüfung der Fahrzeugdaten.
+            </p>
+            <div className="mt-9 grid gap-6 md:grid-cols-2 md:gap-x-10 md:gap-y-9">
+              <article>
+                <h3 className="text-lg font-semibold text-midnight">Ersatzteile zum Fahrzeug finden</h3>
+                <p className="mt-2 text-sm leading-relaxed text-midnight/65 md:text-base">Modellname und Baujahr reichen nicht immer aus. Motor, Ausstattung und Produktionszeitraum können die passende Teilevariante beeinflussen.</p>
+              </article>
+              <article>
+                <h3 className="text-lg font-semibold text-midnight">VIN oder Fahrzeugschein prüfen</h3>
+                <p className="mt-2 text-sm leading-relaxed text-midnight/65 md:text-base">Die VIN und die technischen Angaben im Fahrzeugschein helfen dabei, ein Fahrzeug genauer einzugrenzen. Für eine verbindliche Zuordnung prüft unser Team diese Daten persönlich.</p>
+              </article>
+              <article>
+                <h3 className="text-lg font-semibold text-midnight">OEM- und Teilenummern verstehen</h3>
+                <p className="mt-2 text-sm leading-relaxed text-midnight/65 md:text-base">Eine Nummer auf dem alten Teil ist ein wertvoller Hinweis. Sie sollte mit Fahrzeug, Einbauposition und möglichen Varianten abgeglichen werden.</p>
+              </article>
+              <article>
+                <h3 className="text-lg font-semibold text-midnight">Motoröl und Wartung</h3>
+                <p className="mt-2 text-sm leading-relaxed text-midnight/65 md:text-base">Bei Ölfragen zählt neben der Viskosität vor allem die Freigabe des Fahrzeugherstellers. Wartungsintervalle und Vorgaben können sich je nach Motor unterscheiden.</p>
+              </article>
+            </div>
+            <div className="mt-10 border-l-4 border-electric bg-silver/45 p-5 md:p-6">
+              <h3 className="text-lg font-semibold text-midnight">Warum die persönliche Teileprüfung wichtig bleibt</h3>
+              <p className="mt-2 text-sm leading-relaxed text-midnight/70 md:text-base">Ähnliche Fahrzeuge können unterschiedliche Bremsen, Sensoren oder Anschlüsse haben. TeilePilot24 gleicht deine Angaben deshalb vor einem konkreten Angebot persönlich ab und fragt bei Unklarheiten nach.</p>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="assistant-faq-title" className="bg-silver/45 px-5 py-14 md:px-10 md:py-20">
+          <div className="mx-auto max-w-[980px]">
+            <p className="text-xs font-semibold uppercase tracking-wider text-electric">Häufige Fragen</p>
+            <h2 id="assistant-faq-title" className="mt-3 text-3xl font-semibold text-midnight md:text-4xl">Fragen zum KI-Assistenten</h2>
+            <div className="mt-7 grid gap-3 md:grid-cols-2">
+              {faqItems.map((item) => (
+                <article key={item.question} className="border border-silver bg-white p-5 md:p-6">
+                  <h3 className="text-base font-semibold text-midnight md:text-lg">{item.question}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-midnight/65 md:text-base">{item.answer}</p>
+                </article>
+              ))}
+            </div>
+            <a href={assistantWhatsAppUrl} target="_blank" rel="noopener noreferrer" onClick={trackWhatsAppConversion} className="mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-electric hover:text-electric-dark">
+              Persönliche Teileprüfung per WhatsApp anfragen <ArrowRight size={17} aria-hidden="true" />
+            </a>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </>
+  )
+}
+
+export function KiChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([welcomeMessage])
   const [draft, setDraft] = useState('')
   const [isTyping, setIsTyping] = useState(false)
@@ -230,7 +327,7 @@ export default function KiAssistent() {
       if (event.key === 'Escape') { inputRef.current?.blur(); setMobileFocus(false) }
     }
     window.addEventListener('keydown', escape)
-    return () => {
+  return () => {
       document.body.style.overflow = previousOverflow
       window.cancelAnimationFrame(frame)
       window.visualViewport?.removeEventListener('resize', update)
@@ -367,23 +464,8 @@ export default function KiAssistent() {
     }
   }
 
-  return (
-    <>
-      <Navigation transparent={false} />
-      <main className="min-h-screen bg-[radial-gradient(ellipse_at_top,_#eaf0ff_0%,_#f8faff_50%,_#f7f9fc_100%)] pt-[72px] text-midnight">
-        <section className="mx-auto max-w-[960px] px-3 pb-10 pt-5 sm:px-6 md:pt-8 lg:px-8" aria-labelledby="assistant-title">
-          <div className="mb-6 text-center md:mb-8">
-            <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-electric">
-              <Sparkles size={15} aria-hidden="true" /> TeilePilot24 KI-Assistent
-            </p>
-            <h1 id="assistant-title" className="mt-3 text-[32px] font-semibold leading-tight tracking-[-0.035em] sm:text-[38px] lg:text-[46px]">
-              Dein KI-Assistent für Autoteile
-            </h1>
-            <p className="mx-auto mt-3 max-w-[640px] text-sm leading-relaxed text-midnight/65 sm:text-base">
-              TeilePilot hilft dir weiter – von der ersten Frage bis zur persönlichen Teileprüfung.
-            </p>
-          </div>
 
+  return (
           <div ref={shellRef} data-mobile-focus={mobileFocus} className="tp-chat-shell flex h-[calc(100dvh-235px)] min-h-[420px] flex-col overflow-hidden rounded-[24px] border border-[#e1e7f0] bg-white shadow-[0_18px_60px_rgba(40,63,128,0.10)] sm:h-[610px] lg:h-[580px]">
             <header className="tp-chat-header flex shrink-0 items-center gap-2 border-b border-[#e8edf4] bg-white px-3 py-2.5 sm:gap-3 sm:px-5">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#edf2ff]" aria-hidden="true">
@@ -546,80 +628,5 @@ export default function KiAssistent() {
               </div>
             </div>
           </div>
-
-          <div className="mt-4 flex flex-col gap-3 rounded-xl border border-[#e1e7f0] bg-white p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
-            <div>
-              <p className="text-sm font-semibold">Du brauchst ein konkretes Ersatzteil?</p>
-              <p className="mt-1 text-xs leading-relaxed text-midnight/60 sm:text-sm">Unser Team prüft deine Fahrzeugdaten persönlich und erstellt danach ein Angebot.</p>
-            </div>
-            <a
-              href={assistantWhatsAppUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={trackWhatsAppConversion}
-              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-whatsapp px-4 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-whatsapp-dark"
-            >
-              <MessageCircle size={17} aria-hidden="true" /> Per WhatsApp anfragen
-            </a>
-          </div>
-          <p className="mt-4 text-center text-xs leading-relaxed text-midnight/50">
-            KI-Antworten können Fehler enthalten. Eine verbindliche Teilezuordnung erfolgt erst nach persönlicher Prüfung.
-          </p>
-        </section>
-
-        <section aria-labelledby="assistant-info-title" className="bg-white px-5 py-14 md:px-10 md:py-20">
-          <div className="mx-auto max-w-[980px]">
-            <p className="text-xs font-semibold uppercase tracking-wider text-electric">Erste Orientierung</p>
-            <h2 id="assistant-info-title" className="mt-3 max-w-3xl text-3xl font-semibold leading-tight text-midnight md:text-4xl">
-              KI-Assistent für Autoteile: Fragen stellen, Angaben besser einordnen
-            </h2>
-            <p className="mt-5 max-w-3xl text-base leading-relaxed text-midnight/70">
-              Ob du ein Ersatzteil suchst oder eine technische Angabe verstehen möchtest: Der Assistent bietet eine erste Orientierung. Ein konkretes Ersatzteil-Angebot entsteht erst nach persönlicher Prüfung der Fahrzeugdaten.
-            </p>
-            <div className="mt-9 grid gap-6 md:grid-cols-2 md:gap-x-10 md:gap-y-9">
-              <article>
-                <h3 className="text-lg font-semibold text-midnight">Ersatzteile zum Fahrzeug finden</h3>
-                <p className="mt-2 text-sm leading-relaxed text-midnight/65 md:text-base">Modellname und Baujahr reichen nicht immer aus. Motor, Ausstattung und Produktionszeitraum können die passende Teilevariante beeinflussen.</p>
-              </article>
-              <article>
-                <h3 className="text-lg font-semibold text-midnight">VIN oder Fahrzeugschein prüfen</h3>
-                <p className="mt-2 text-sm leading-relaxed text-midnight/65 md:text-base">Die VIN und die technischen Angaben im Fahrzeugschein helfen dabei, ein Fahrzeug genauer einzugrenzen. Für eine verbindliche Zuordnung prüft unser Team diese Daten persönlich.</p>
-              </article>
-              <article>
-                <h3 className="text-lg font-semibold text-midnight">OEM- und Teilenummern verstehen</h3>
-                <p className="mt-2 text-sm leading-relaxed text-midnight/65 md:text-base">Eine Nummer auf dem alten Teil ist ein wertvoller Hinweis. Sie sollte mit Fahrzeug, Einbauposition und möglichen Varianten abgeglichen werden.</p>
-              </article>
-              <article>
-                <h3 className="text-lg font-semibold text-midnight">Motoröl und Wartung</h3>
-                <p className="mt-2 text-sm leading-relaxed text-midnight/65 md:text-base">Bei Ölfragen zählt neben der Viskosität vor allem die Freigabe des Fahrzeugherstellers. Wartungsintervalle und Vorgaben können sich je nach Motor unterscheiden.</p>
-              </article>
-            </div>
-            <div className="mt-10 border-l-4 border-electric bg-silver/45 p-5 md:p-6">
-              <h3 className="text-lg font-semibold text-midnight">Warum die persönliche Teileprüfung wichtig bleibt</h3>
-              <p className="mt-2 text-sm leading-relaxed text-midnight/70 md:text-base">Ähnliche Fahrzeuge können unterschiedliche Bremsen, Sensoren oder Anschlüsse haben. TeilePilot24 gleicht deine Angaben deshalb vor einem konkreten Angebot persönlich ab und fragt bei Unklarheiten nach.</p>
-            </div>
-          </div>
-        </section>
-
-        <section aria-labelledby="assistant-faq-title" className="bg-silver/45 px-5 py-14 md:px-10 md:py-20">
-          <div className="mx-auto max-w-[980px]">
-            <p className="text-xs font-semibold uppercase tracking-wider text-electric">Häufige Fragen</p>
-            <h2 id="assistant-faq-title" className="mt-3 text-3xl font-semibold text-midnight md:text-4xl">Fragen zum KI-Assistenten</h2>
-            <div className="mt-7 grid gap-3 md:grid-cols-2">
-              {faqItems.map((item) => (
-                <article key={item.question} className="border border-silver bg-white p-5 md:p-6">
-                  <h3 className="text-base font-semibold text-midnight md:text-lg">{item.question}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-midnight/65 md:text-base">{item.answer}</p>
-                </article>
-              ))}
-            </div>
-            <a href={assistantWhatsAppUrl} target="_blank" rel="noopener noreferrer" onClick={trackWhatsAppConversion} className="mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-electric hover:text-electric-dark">
-              Persönliche Teileprüfung per WhatsApp anfragen <ArrowRight size={17} aria-hidden="true" />
-            </a>
-          </div>
-        </section>
-      </main>
-      <Footer />
-    </>
   )
 }
